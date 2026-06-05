@@ -13,12 +13,85 @@
     </script>
     <script>
         // Force dark mode by default
-        if (localStorage.getItem('theme') === 'light') {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
+        localStorage.setItem('theme', 'dark');
+        document.documentElement.classList.add('dark');
     </script>
+    <style>
+        /* custom smooth table scroll for live data preview */
+        .preview-table-container {
+            scrollbar-width: thin;
+        }
+        .preview-table-container::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .preview-table-container::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        .preview-table-container::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+        .dark .preview-table-container::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Premium card styles for Core Data Services */
+        .premium-service-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(0px);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(59,130,246,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .premium-service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        .premium-service-card:hover::before {
+            left: 100%;
+        }
+        .premium-service-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(59,130,246,0.4);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.2);
+        }
+        .dark .premium-service-card {
+            background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(10,15,30,0.95) 100%);
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+        .service-icon {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 8px 20px -5px rgba(59,130,246,0.4);
+        }
+        .dark .service-icon {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 8px 20px -5px rgba(59,130,246,0.3);
+        }
+        .glow-text {
+            text-shadow: 0 0 8px rgba(59,130,246,0.3);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col font-sans transition-colors duration-300">
 
@@ -38,48 +111,168 @@
                     <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                     <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"></path></svg>
                 </button>
-                <a href="sample.html" class="bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition shadow-sm">Get Free Sample</a>
+                <a href="#" class="bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition shadow-sm">Get Free Sample</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="max-w-5xl mx-auto px-6 py-20 text-center">
+    <header class="max-w-5xl mx-auto px-6 py-16 text-center">
         <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-[1.1] mb-6">Automated Zillow Scraping. <br><span class="text-blue-600 dark:text-blue-400">Verified Realtor Leads.</span></h1>
         <p class="text-lg text-slate-600 dark:text-neutral-400 mb-10 max-w-2xl mx-auto font-medium">We build custom extraction engines to pull pristine, formatted data directly from Zillow and Realtor directories.</p>
-        <a href="sample.html" class="bg-blue-600 dark:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-blue-700 transition">Request Data Sample</a>
+        <a href="#" class="bg-blue-600 dark:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-blue-700 transition shadow-md">Request Data Sample</a>
     </header>
 
-    <!-- New Services Highlight Section -->
+    <!-- LIVE DATA PREVIEW SECTION (Premium Realtor Sample) -->
     <section class="max-w-7xl mx-auto px-6 py-12">
-        <h2 class="text-3xl font-bold text-center mb-12 text-slate-950 dark:text-white">Core Data Services</h2>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-slate-200 dark:border-neutral-800">
-                <h3 class="font-bold text-blue-600 mb-2">Zillow/Realtor Scraping</h3>
-                <p class="text-sm text-slate-600 dark:text-neutral-400">Scale property extraction and MLS-specific data mining.</p>
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div>
+                <div class="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                    </span>
+                    Live Data Preview
+                </div>
+                <h2 class="text-3xl font-bold text-slate-950 dark:text-white mt-4">Verified Realtor Leads <span class="text-blue-600 dark:text-blue-400">(NY Market Sample)</span></h2>
+                <p class="text-slate-600 dark:text-neutral-400 mt-2 max-w-2xl">Freshly extracted agent profiles — including direct phone, email, agency, and city. Updated in real-time from our scraping pipeline.</p>
             </div>
-            <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-slate-200 dark:border-neutral-800">
-                <h3 class="font-bold text-blue-600 mb-2">Realtor Lead Generation</h3>
-                <p class="text-sm text-slate-600 dark:text-neutral-400">Verified emails, phone numbers, and agency affiliations.</p>
+            <div class="flex gap-2">
+                <button id="refreshPreviewBtn" class="text-sm flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-neutral-800 transition shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    Refresh data
+                </button>
+                <span class="text-xs text-slate-400 dark:text-neutral-500 self-center hidden md:block">Last sync: just now</span>
             </div>
-            <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-slate-200 dark:border-neutral-800">
-                <h3 class="font-bold text-blue-600 mb-2">Advanced Web Scraping</h3>
-                <p class="text-sm text-slate-600 dark:text-neutral-400">Bypassing anti-bot firewalls for custom data extraction.</p>
+        </div>
+
+        <!-- responsive table with scroll -->
+        <div class="preview-table-container rounded-2xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-x-auto shadow-lg transition-all fade-in-up">
+            <table class="min-w-[1000px] w-full text-sm">
+                <thead class="bg-slate-50 dark:bg-neutral-950/70 border-b border-slate-200 dark:border-neutral-800">
+                    <tr>
+                        <th class="px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300">Agent Name</th>
+                        <th class="px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300">Phone</th>
+                        <th class="px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300">Email</th>
+                        <th class="px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300">Agency</th>
+                        <th class="px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300">City</th>
+                    </tr>
+                </thead>
+                <tbody id="live-leads-tbody" class="divide-y divide-slate-100 dark:divide-neutral-800/80">
+                    <tr><td colspan="5" class="text-center py-10 text-slate-400">Loading live data preview...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-between items-center mt-4 text-xs text-slate-500 dark:text-neutral-500">
+            <div class="flex items-center gap-1">
+                <span class="w-2 h-2 bg-green-500 rounded-full"></span> <span>Live sample • 15 records shown</span>
             </div>
-            <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-slate-200 dark:border-neutral-800">
-                <h3 class="font-bold text-blue-600 mb-2">Data Entry & Formatting</h3>
-                <p class="text-sm text-slate-600 dark:text-neutral-400">Deduplicated, CRM-ready datasets in Excel or Google Sheets.</p>
+            <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">Download full dataset (CSV) →</a>
+        </div>
+    </section>
+
+    <!-- PREMIUM CORE DATA SERVICES SECTION - Redesigned with luxury feel -->
+    <section class="max-w-7xl mx-auto px-6 py-20 relative">
+        <!-- Background decorative blur -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="relative z-10">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold tracking-wide uppercase border border-blue-500/20 backdrop-blur-sm">Premium Solutions</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-5 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-blue-100 dark:to-white bg-clip-text text-transparent">Core Data Services</h2>
+                <p class="text-slate-600 dark:text-neutral-400 mt-4 max-w-2xl mx-auto">Enterprise-grade data infrastructure with 99.9% accuracy and real-time validation</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1: Zillow/Realtor Scraping -->
+                <div class="premium-service-card rounded-2xl p-7 group cursor-pointer">
+                    <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">Zillow/Realtor Scraping</h3>
+                    <p class="text-slate-600 dark:text-neutral-400 text-sm leading-relaxed">High-volume extraction with anti-detect rotation, proxy bypass, and MLS-specific property mining for institutional clients.</p>
+                    <div class="mt-4 flex items-center gap-1 text-blue-600 dark:text-blue-400 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Learn more</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                </div>
+                
+                <!-- Card 2: Realtor Lead Generation -->
+                <div class="premium-service-card rounded-2xl p-7 group cursor-pointer">
+                    <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">Realtor Lead Generation</h3>
+                    <p class="text-slate-600 dark:text-neutral-400 text-sm leading-relaxed">Verified emails, direct phone numbers, agency affiliations, and social profiles — scrubbed, deduped, and CRM-ready.</p>
+                    <div class="mt-4 flex items-center gap-1 text-blue-600 dark:text-blue-400 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Learn more</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                </div>
+                
+                <!-- Card 3: Advanced Web Scraping -->
+                <div class="premium-service-card rounded-2xl p-7 group cursor-pointer">
+                    <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">Advanced Web Scraping</h3>
+                    <p class="text-slate-600 dark:text-neutral-400 text-sm leading-relaxed">Custom JS rendering, bypassing anti-bot firewalls (Cloudflare, CAPTCHA), headless browsers at scale for any domain.</p>
+                    <div class="mt-4 flex items-center gap-1 text-blue-600 dark:text-blue-400 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Learn more</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                </div>
+                
+                <!-- Card 4: Data Entry & Formatting -->
+                <div class="premium-service-card rounded-2xl p-7 group cursor-pointer">
+                    <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m-8 8v4m0-4c-2 0-3.5-1-4-2m4 2c2 0 3.5-1 4-2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">Data Entry & Formatting</h3>
+                    <p class="text-slate-600 dark:text-neutral-400 text-sm leading-relaxed">Deduplicated, standardized datasets in Excel, Google Sheets, or API-ready JSON. Quality assured by automated validation.</p>
+                    <div class="mt-4 flex items-center gap-1 text-blue-600 dark:text-blue-400 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Learn more</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trust Badge Row -->
+            <div class="flex flex-wrap justify-center gap-8 mt-16 pt-6 border-t border-slate-200 dark:border-neutral-800/60">
+                <div class="flex items-center gap-2 text-slate-600 dark:text-neutral-400">
+                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-sm font-medium">ISO 27001 Ready</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-600 dark:text-neutral-400">
+                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-sm font-medium">99.9% Uptime SLA</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-600 dark:text-neutral-400">
+                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-sm font-medium">24/7 Data Pipeline</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Trust Metrics -->
+    <!-- Trust Metrics (enhanced) -->
     <section class="max-w-7xl mx-auto px-6 w-full py-12">
-        <div class="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-3xl p-8 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            <div><p class="text-4xl font-extrabold tracking-tight">650+</p><p class="text-xs uppercase mt-2">Projects Delivered</p></div>
-            <div><p class="text-4xl font-extrabold tracking-tight">Custom</p><p class="text-xs uppercase mt-2">Bot Bypass</p></div>
-            <div><p class="text-4xl font-extrabold tracking-tight">99.9%</p><p class="text-xs uppercase mt-2">Accuracy</p></div>
-            <div><p class="text-4xl font-extrabold tracking-tight">CRM</p><p class="text-xs uppercase mt-2">Ready Formats</p></div>
+        <div class="bg-gradient-to-br from-slate-50 to-white dark:from-neutral-900 dark:to-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-3xl p-8 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center shadow-xl">
+            <div><p class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">650+</p><p class="text-xs uppercase mt-2 font-semibold">Projects Delivered</p></div>
+            <div><p class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Custom</p><p class="text-xs uppercase mt-2 font-semibold">Bot Bypass</p></div>
+            <div><p class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">99.9%</p><p class="text-xs uppercase mt-2 font-semibold">Accuracy</p></div>
+            <div><p class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">CRM</p><p class="text-xs uppercase mt-2 font-semibold">Ready Formats</p></div>
         </div>
     </section>
 
@@ -89,17 +282,115 @@
     </footer>
 
     <script>
+        // Live data preview dataset
+        const rawLeadData = [
+            { agentName: "Gabriel Kashi", phone: "347-419-5268", email: "gabriel@ksrealtyny.com", agency: "Keystone Realty USA Corp", city: "Brooklyn" },
+            { agentName: "Maureen Folan", phone: "646-651-7127", email: "mofolan@yahoo.com", agency: "Maureen Folan R E Group Llc", city: "Fresh Meadows" },
+            { agentName: "Dan Dong", phone: "929-291-9897", email: "dandongmovesyou@gmail.com", agency: "RE MAX Edge", city: "Brooklyn" },
+            { agentName: "Barry Paley", phone: "516-503-4242", email: "Barry@BarryPaley.com", agency: "Keller Williams Points North", city: "Ridgewood" },
+            { agentName: "jaswinder singh", phone: "718-831-1230", email: "singhnewyork@yahoo.com", agency: "Realty Connect USA LLC", city: "Hicksville" },
+            { agentName: "Jamie Zheng", phone: "718-886-0668", email: "zheng.jamie@gmail.com", agency: "Jamie & Connie Real Estate Grp", city: "Bayside" },
+            { agentName: "Edna Mashaal", phone: "516-840-8888", email: "ednamashaalrealty@yahoo.com", agency: "Edna Mashaal Realty Llc", city: "Great Neck" },
+            { agentName: "Jason Zhou", phone: "347-988-5318", email: "jasonzhourealty@gmail.com", agency: "RE MAX Edge", city: "Brooklyn" },
+            { agentName: "Laura Dupkin Memisha", phone: "516-984-0343", email: "laura@therealtyadvisors.com", agency: "REALTY ADVISORS INC.", city: "Levittown" },
+            { agentName: "Lily Tran", phone: "917-279-0177", email: "info@lilytranteam.com", agency: "EXP Realty", city: "Maspeth" },
+            { agentName: "Vito Angelo", phone: "718-887-5708", email: "vitoangelo@remax.net", agency: "RE MAX Real Estate Professionals", city: "Brooklyn" },
+            { agentName: "Ronald Ferrara", phone: "347-450-0153", email: "ron@theferrarateam.com", agency: "KELLER WILLIAMS REALTY LANDMARK II", city: "Ridgewood" },
+            { agentName: "Gagandeep Manuja", phone: "347-993-2000", email: "jsingh@realtyconnectusa.com", agency: "Realty Connect USA LLC", city: "Hicksville" },
+            { agentName: "Seth Levy", phone: "516-364-4663", email: "seth@shawnelliott.com", agency: "Signature Premier Properties", city: "Bellmore" },
+            { agentName: "Shirley Chen", phone: "917-254-0248", email: "shirleychen727@gmail.com", agency: "Prime Realty", city: "Flushing" }
+        ];
+
+        function renderLeadTable(dataArray) {
+            const tbody = document.getElementById('live-leads-tbody');
+            if (!tbody) return;
+            if (!dataArray || dataArray.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-slate-400">No preview data available</td></tr>';
+                return;
+            }
+            let html = '';
+            for (let lead of dataArray) {
+                const mailtoLink = lead.email ? `mailto:${lead.email}` : '#';
+                html += `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-neutral-800/40 transition-colors">
+                        <td class="px-5 py-3.5 font-medium text-slate-800 dark:text-neutral-200">${escapeHtml(lead.agentName)}</td>
+                        <td class="px-5 py-3.5 text-slate-700 dark:text-neutral-300"><a href="tel:${lead.phone}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">${escapeHtml(lead.phone)}</a></td>
+                        <td class="px-5 py-3.5 text-slate-700 dark:text-neutral-300"><a href="${mailtoLink}" class="hover:text-blue-600 dark:hover:text-blue-400 underline decoration-dotted underline-offset-2">${escapeHtml(lead.email)}</a></td>
+                        <td class="px-5 py-3.5 text-slate-700 dark:text-neutral-300">${escapeHtml(lead.agency)}</td>
+                        <td class="px-5 py-3.5"><span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>${escapeHtml(lead.city)}</span></td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function getShuffledCopy(arr) {
+            const newArr = [...arr];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr;
+        }
+
+        let currentDisplayData = [...rawLeadData];
+        function refreshPreview(isSimulatedLive = true) {
+            if (isSimulatedLive) {
+                currentDisplayData = getShuffledCopy(rawLeadData);
+                const lastSyncSpan = document.querySelector('.hidden.md\\:block');
+                if (lastSyncSpan) {
+                    const now = new Date();
+                    lastSyncSpan.innerHTML = `Last sync: ${now.toLocaleTimeString([], { hour: '2-digit', minute:'2-digit', second:'2-digit' })}`;
+                }
+                const tableDiv = document.querySelector('.preview-table-container');
+                if (tableDiv) {
+                    tableDiv.classList.add('fade-in-up');
+                    setTimeout(() => tableDiv.classList.remove('fade-in-up'), 500);
+                }
+            }
+            renderLeadTable(currentDisplayData);
+        }
+
+        renderLeadTable(rawLeadData);
+        const initialSyncSpan = document.querySelector('.hidden.md\\:block');
+        if (initialSyncSpan) initialSyncSpan.innerHTML = `Last sync: ${new Date().toLocaleTimeString()}`;
+        
+        document.getElementById('refreshPreviewBtn')?.addEventListener('click', () => refreshPreview(true));
+        
+        // Theme toggle (maintains dark default)
         const themeToggleBtn = document.getElementById('theme-toggle');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
         const lightIcon = document.getElementById('theme-toggle-light-icon');
-        if (document.documentElement.classList.contains('dark')) { lightIcon.classList.remove('hidden'); } else { darkIcon.classList.remove('hidden'); }
-        themeToggleBtn.addEventListener('click', function() {
-            darkIcon.classList.toggle('hidden'); lightIcon.classList.toggle('hidden');
+        function updateIcons() {
             if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark'); localStorage.setItem('theme', 'light');
+                darkIcon?.classList.add('hidden');
+                lightIcon?.classList.remove('hidden');
             } else {
-                document.documentElement.classList.add('dark'); localStorage.setItem('theme', 'dark');
+                darkIcon?.classList.remove('hidden');
+                lightIcon?.classList.add('hidden');
             }
+        }
+        updateIcons();
+        themeToggleBtn?.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateIcons();
+            renderLeadTable(currentDisplayData);
         });
     </script>
 </body>
