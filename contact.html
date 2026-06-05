@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Home Owner Leads</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col font-sans">
+
+    <!-- Navigation Area -->
+    <nav class="py-6 px-6 text-center">
+        <a href="index.html" class="text-xl font-extrabold tracking-tight text-slate-950 dark:text-white inline-flex items-center gap-2 hover:opacity-80 transition">
+            <span class="w-3 h-3 bg-blue-600 dark:bg-blue-500 rounded-full"></span> Back to Home
+        </a>
+    </nav>
+
+    <!-- Form Layout Wrapper -->
+    <main class="max-w-xl mx-auto px-6 py-10 flex-grow w-full">
+        <div class="bg-white dark:bg-neutral-900 p-8 md:p-10 rounded-3xl border border-slate-200/60 dark:border-neutral-800/60 shadow-xl shadow-slate-100/40 dark:shadow-none">
+            <h1 class="text-2xl font-bold tracking-tight text-slate-950 dark:text-white mb-2">Discuss Your Data Project</h1>
+            <p class="text-xs font-medium text-slate-500 dark:text-neutral-400 mb-8 leading-relaxed">Need a custom scraping script built? Have a massive data entry pipeline that needs formatting? Send us the details and we will provide a technical review and quote.</p>
+            
+            <!-- FORM SETUP: Replace YOUR_FORMSPREE_ID with your Formspree Endpoint Link -->
+            <form action="https://formspree.io/f/xnjynler" method="POST" class="space-y-5">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Name</label>
+                        <input type="text" name="name" class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Email</label>
+                        <input type="email" name="email" class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Project Type</label>
+                    <select name="project-type" class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm text-slate-700 dark:text-neutral-300 focus:outline-none">
+                        <option value="custom-script">Custom Web Scraping Script / Bot</option>
+                        <option value="bulk-leads">Bulk Realtor Lead Generation</option>
+                        <option value="data-entry">Data Entry & Formatting</option>
+                        <option value="other">Other Inquiry</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Project Details</label>
+                    <textarea name="details" placeholder="Please describe the website to be scraped, the volume of data needed, or your specific CRM requirements..." class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm h-32 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-slate-950 dark:bg-white text-white dark:text-slate-950 py-3.5 rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-slate-200 transition shadow-md">Send Project Details</button>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>
