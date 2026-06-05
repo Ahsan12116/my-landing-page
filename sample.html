@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
+    </script>
+    <script>
+        // Force dark mode by default unless the user explicitly saved 'light'
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
     </script>
 </head>
 <body class="bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col font-sans">
@@ -25,7 +33,6 @@
             <h1 class="text-2xl font-bold tracking-tight text-slate-950 dark:text-white mb-2">Request Realtor/Zillow Sample Data</h1>
             <p class="text-xs font-medium text-slate-500 dark:text-neutral-400 mb-8 leading-relaxed">Tell us your geographic target. We will scrape and format a free sample list of active real estate agents or property data for you to verify our quality.</p>
             
-            <!-- FORM SETUP: Replace YOUR_FORMSPREE_ID with your Formspree Endpoint Link -->
             <form action="https://formspree.io/f/xnjynler" method="POST" class="space-y-5">
                 <div>
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Your Name</label>
