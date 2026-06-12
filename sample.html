@@ -95,7 +95,6 @@
             position: relative;
         }
         
-        /* HEADER HOVER TOOLTIP */
         .responsive-table th:hover {
             overflow: visible;
             z-index: 30;
@@ -130,7 +129,6 @@
             position: relative;
         }
         
-        /* CELL HOVER TOOLTIP */
         .responsive-table td:hover {
             overflow: visible;
             z-index: 5;
@@ -371,6 +369,11 @@
         const recordCount = document.getElementById('recordCount');
         const selectedStateBadge = document.getElementById('selectedStateBadge');
 
+        // Columns that should NOT get $ sign
+        const nonPriceColumns = ['zip', 'zipcode', 'zip code', 'postal', 'postal code', 'post code', 
+                                  'id', 'number', '#', 'unit', 'sqft', 'sq ft', 'beds', 'baths',
+                                  'year built', 'lot size', 'mls', 'mlsid', 'mls id'];
+
         function filterColumns(columns) {
             return columns.filter(col => {
                 const lower = col.toLowerCase().trim();
@@ -380,6 +383,20 @@
                 if (/mobile\s*2|cell\s*2|tel\s*2/i.test(lower)) return false;
                 return true;
             });
+        }
+
+        // Check if a column name is a non-price column
+        function isNonPriceColumn(colName) {
+            if (!colName) return false;
+            const lower = colName.toLowerCase().trim();
+            return nonPriceColumns.some(npc => lower.includes(npc));
+        }
+
+        // Check if column name is a price column
+        function isPriceColumn(colName) {
+            if (!colName) return false;
+            const lower = colName.toLowerCase().trim();
+            return /price|list|sale|rent|amount|cost|fee|value|payment/i.test(lower);
         }
 
         function isURL(text) {
@@ -402,15 +419,46 @@
             return matches && matches.length > 0 ? matches[0].trim() : '';
         }
 
-        function isPrice(text) {
+        // Check if a value looks like a zipcode (5 digits or 5+4)
+        function isZipcode(text) {
             if (!text) return false;
             const str = String(text).trim();
-            if (str.startsWith('$')) return true;
-            const cleaned = str.replace(/[,$]/g, '');
-            return /^\d{3,}$/.test(cleaned) && parseFloat(cleaned) > 100;
+            return /^\d{5}(-\d{4})?$/.test(str);
         }
 
-        function formatCell(value) {
+        // Check if value is a price (NOT zipcode, NOT phone, NOT ID)
+        function isPrice(text, colName) {
+            if (!text) return false;
+            const str = String(text).trim();
+            
+            // Already has $ sign
+            if (str.startsWith('$')) return true;
+            
+            // Skip if it looks like a zipcode
+            if (isZipcode(str)) return false;
+            
+            // Skip if column is known non-price
+            if (isNonPriceColumn(colName)) return false;
+            
+            // Only apply to price-related columns or values with commas
+            const cleaned = str.replace(/[,$]/g, '');
+            
+            // Must be a valid number
+            if (!/^\d+$/.test(cleaned)) return false;
+            
+            const num = parseInt(cleaned);
+            
+            // Price must be >= 1000 AND (in price column OR has comma formatting OR >= 10000)
+            if (num >= 1000) {
+                if (isPriceColumn(colName)) return true;
+                if (str.includes(',')) return true;
+                if (num >= 10000) return true;
+            }
+            
+            return false;
+        }
+
+        function formatCell(value, colName) {
             if (value === null || value === undefined || value === '') return '—';
             const str = String(value).trim();
             
@@ -431,7 +479,8 @@
                 return `<a href="tel:${cleaned}" title="Call ${firstPhone}">📞 ${firstPhone}</a>`;
             }
             
-            if (isPrice(str)) {
+            // PRICE - only if NOT zipcode and NOT non-price column
+            if (isPrice(str, colName)) {
                 let num = str.replace(/[$,]/g, '');
                 if (!str.startsWith('$')) {
                     return `<span class="price-cell">$${Number(num).toLocaleString()}</span>`;
@@ -513,7 +562,6 @@
             const colWidth = Math.floor(100 / (columnsToShow.length + 1));
             const colStyle = `width: ${colWidth}%;`;
             
-            // HEADERS with hover tooltip via title attribute + span wrapper
             tableHeader.innerHTML = `<tr>
                 <th style="width: 32px;">#</th>
                 ${columnsToShow.map(col => 
@@ -526,7 +574,7 @@
                     <td>${index + 1}</td>
                     ${columnsToShow.map(col => {
                         const value = lead[col] || '';
-                        const formatted = formatCell(value);
+                        const formatted = formatCell(value, col); // Pass column name
                         const plainText = String(value || '—').replace(/"/g, '&quot;');
                         return `<td data-label="${col}" style="${colStyle}" title="${plainText}"><span class="cell-content">${formatted}</span></td>`;
                     }).join('')}
