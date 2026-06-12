@@ -15,7 +15,6 @@
         document.documentElement.classList.add('dark');
     </script>
     <style>
-        /* Custom scrollbars for table and dropdown */
         .custom-scrollbar { scrollbar-width: thin; }
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
@@ -25,7 +24,6 @@
         .light-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
         .dark .light-scroll::-webkit-scrollbar-track { background: #1e293b; }
 
-        /* Dropdown Animation Utilities */
         .dropdown-open {
             opacity: 1;
             transform: scale(1) translateY(0);
@@ -65,7 +63,7 @@
                 </button>
                 
                 <ul id="dropdownMenu" class="absolute z-50 w-full mt-2 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl shadow-xl max-h-60 overflow-y-auto custom-scrollbar light-scroll dropdown-closed transition-all duration-200 origin-top">
-                    </ul>
+                </ul>
             </div>
         </div>
 
@@ -86,16 +84,9 @@
         </div>
 
         <div class="custom-scrollbar rounded-2xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-x-auto shadow-sm">
-            <table class="min-w-full sm:min-w-[1000px] w-full text-sm">
-                <thead class="bg-slate-50 dark:bg-neutral-950/70 border-b border-slate-200 dark:border-neutral-800">
-                    <tr>
-                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agent Name</th>
-                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Phone</th>
-                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Email</th>
-                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agency</th>
-                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">City</th>
-                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">State</th>
-                    </tr>
+            <table class="min-w-full w-full text-sm" id="dataTable">
+                <thead id="tableHeader" class="bg-slate-50 dark:bg-neutral-950/70 border-b border-slate-200 dark:border-neutral-800">
+                    <!-- Headers will be dynamically generated -->
                 </thead>
                 <tbody id="sample-tbody" class="divide-y divide-slate-100 dark:divide-neutral-800/80">
                     <tr><td colspan="6" class="text-center py-12 px-4 text-slate-400">Select a State above to fetch live sample data.</td></tr>
@@ -105,9 +96,7 @@
     </main>
 
     <script>
-        // --- CONFIGURATION ---
-      // This tells your website to look inside the "samples" folder in your repository
-const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing-page/main/samples/';
+        const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing-page/main/samples/';
 
         const usStates = [
             { code: "AL", name: "Alabama" }, { code: "AK", name: "Alaska" }, { code: "AZ", name: "Arizona" },
@@ -131,6 +120,7 @@ const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing
 
         let currentActiveData = [];
         let currentStateValue = "";
+        let currentColumns = [];
 
         const dropdownTrigger = document.getElementById('dropdownTrigger');
         const dropdownMenu = document.getElementById('dropdownMenu');
@@ -139,9 +129,111 @@ const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing
         const customSelectContainer = document.getElementById('customSelectContainer');
         
         const tbody = document.getElementById('sample-tbody');
+        const tableHeader = document.getElementById('tableHeader');
         const actionContainer = document.getElementById('actionContainer');
         const recordCount = document.getElementById('recordCount');
         const selectedStateBadge = document.getElementById('selectedStateBadge');
+
+        // --- ENHANCED HEADER DETECTION ---
+        function findColumnValue(row, possibleNames) {
+            // Try each possible header name (case-insensitive)
+            for (let name of possibleNames) {
+                // Check exact match
+                if (row[name] !== undefined) return row[name];
+                
+                // Check case-insensitive match
+                const foundKey = Object.keys(row).find(key => 
+                    key.toLowerCase().trim() === name.toLowerCase().trim()
+                );
+                if (foundKey) return row[foundKey];
+                
+                // Check if any key contains the name (partial match)
+                const partialKey = Object.keys(row).find(key => 
+                    key.toLowerCase().includes(name.toLowerCase())
+                );
+                if (partialKey) return row[partialKey];
+            }
+            return '';
+        }
+
+        function normalizeData(rawData, selectedState) {
+            return rawData.map(row => {
+                // Create object with all original columns preserved
+                let mappedRow = { ...row };
+                
+                // Agent Name variations
+                mappedRow._agentName = findColumnValue(row, [
+                    'Agent Name', 'Agent', 'Name', 'agent name', 'agent', 'name',
+                    'AgentName', 'agentname', 'Full Name', 'full name', 'FullName',
+                    'Contact Name', 'contact name', 'ContactName',
+                    'Realtor Name', 'realtor name', 'RealtorName',
+                    'First Name', 'first name', 'FirstName'
+                ]);
+                
+                // Phone variations
+                mappedRow._phone = findColumnValue(row, [
+                    'Phone', 'Phone Number', 'phone', 'phone number',
+                    'Agent Phone', 'agent phone', 'AgentPhone',
+                    'Contact Phone', 'contact phone', 'ContactPhone',
+                    'Phone #', 'phone #', 'Phone#',
+                    'Telephone', 'telephone', 'Tel', 'tel',
+                    'Mobile', 'mobile', 'Cell', 'cell',
+                    'Mobile Phone', 'mobile phone', 'MobilePhone',
+                    'Cell Phone', 'cell phone', 'CellPhone',
+                    'Work Phone', 'work phone', 'WorkPhone'
+                ]);
+                
+                // Email variations
+                mappedRow._email = findColumnValue(row, [
+                    'Email', 'Email Address', 'email', 'email address',
+                    'Agent Email', 'agent email', 'AgentEmail',
+                    'Contact Email', 'contact email', 'ContactEmail',
+                    'E-mail', 'e-mail', 'EmailAddress',
+                    'Work Email', 'work email', 'WorkEmail'
+                ]);
+                
+                // Agency/Brokerage variations
+                mappedRow._agency = findColumnValue(row, [
+                    'Agency', 'agency', 'Agency Name', 'agency name',
+                    'Brokerage', 'brokerage', 'Brokerage Name', 'brokerage name',
+                    'Company', 'company', 'Company Name', 'company name',
+                    'AgencyName', 'BrokerageName', 'CompanyName',
+                    'Firm', 'firm', 'Firm Name', 'firm name',
+                    'Office', 'office', 'Office Name', 'office name',
+                    'Business Name', 'business name', 'BusinessName',
+                    'Organization', 'organization', 'Organization Name'
+                ]);
+                
+                // City variations
+                mappedRow._city = findColumnValue(row, [
+                    'City', 'city', 'City Name', 'city name',
+                    'Location', 'location', 'Town', 'town',
+                    'Municipality', 'municipality'
+                ]);
+                
+                // State variations
+                mappedRow._state = findColumnValue(row, [
+                    'State', 'state', 'State Name', 'state name',
+                    'Province', 'province', 'Region', 'region'
+                ]) || selectedState;
+                
+                // Address variations (additional common field)
+                mappedRow._address = findColumnValue(row, [
+                    'Address', 'address', 'Street Address', 'street address',
+                    'Street', 'street', 'Office Address', 'office address',
+                    'Business Address', 'business address'
+                ]);
+                
+                // Zip/Postal Code variations
+                mappedRow._zip = findColumnValue(row, [
+                    'Zip', 'zip', 'Zip Code', 'zip code',
+                    'Postal Code', 'postal code', 'ZipCode', 'PostalCode',
+                    'Post Code', 'post code'
+                ]);
+                
+                return mappedRow;
+            });
+        }
 
         // --- CUSTOM DROPDOWN LOGIC ---
         function initCustomDropdown() {
@@ -186,7 +278,6 @@ const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing
             toggleDropdown();
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!customSelectContainer.contains(e.target)) {
                 closeDropdown();
@@ -212,20 +303,18 @@ const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing
                 
                 let rawData = XLSX.utils.sheet_to_json(worksheet);
 
-                currentActiveData = rawData.map(row => ({
-                    agentName: row['Agent Name'] || row['Agent'] || row['Name'] || row['agentName'] || '',
-                    phone: row['Phone'] || row['Phone Number'] || row['phone'] || '',
-                    email: row['Email'] || row['Email Address'] || row['email'] || '',
-                    agency: row['Agency'] || row['Brokerage'] || row['Company'] || row['agency'] || '',
-                    city: row['City'] || row['city'] || '',
-                    state: row['State'] || row['state'] || selectedState
-                }));
+                // Normalize data with enhanced header detection
+                currentActiveData = normalizeData(rawData, selectedState);
+                
+                // Get all column headers from the first row
+                currentColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
 
                 renderTable(currentActiveData, selectedState);
 
             } catch (error) {
                 console.error(error);
                 currentActiveData = [];
+                currentColumns = [];
                 clearTable(`No Excel file (.xlsx) found for ${selectedState} yet.`);
             }
         }
@@ -236,33 +325,62 @@ const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing
                 return;
             }
 
+            // Only take first 20 records for display
+            const displayData = data.slice(0, 20);
+            
             actionContainer.classList.remove('hidden');
-            recordCount.textContent = data.length;
+            // Show count of total records available vs showing
+            recordCount.innerHTML = `20 of ${data.length}`;
             selectedStateBadge.textContent = stateCode;
             
-            tbody.innerHTML = data.map(lead => `
+            // Generate table headers dynamically from ALL original columns
+            const columnsToShow = currentColumns.length > 0 ? currentColumns : 
+                ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
+            
+            tableHeader.innerHTML = `
+                <tr>
+                    ${columnsToShow.map(col => 
+                        `<th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">${col}</th>`
+                    ).join('')}
+                </tr>
+            `;
+            
+            // Generate table rows with only 20 records using ORIGINAL column names
+            tbody.innerHTML = displayData.map(lead => `
                 <tr class="hover:bg-slate-50 dark:hover:bg-neutral-800/40 transition-colors">
-                    <td class="px-4 sm:px-5 py-3.5 font-medium text-slate-800 dark:text-neutral-200 whitespace-nowrap sm:whitespace-normal">${lead.agentName || ''}</td>
-                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap">${lead.phone || ''}</td>
-                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap sm:whitespace-normal">${lead.email || ''}</td>
-                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap sm:whitespace-normal">${lead.agency || ''}</td>
-                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap">${lead.city || ''}</td>
-                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap">${lead.state || stateCode}</td>
+                    ${columnsToShow.map(col => 
+                        `<td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap sm:whitespace-normal">${lead[col] || ''}</td>`
+                    ).join('')}
                 </tr>
             `).join('');
         }
 
         function clearTable(message) {
             actionContainer.classList.add('hidden');
+            tableHeader.innerHTML = `
+                <tr>
+                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agent Name</th>
+                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Phone</th>
+                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Email</th>
+                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agency</th>
+                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">City</th>
+                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">State</th>
+                </tr>
+            `;
             tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 px-4 text-slate-400">${message}</td></tr>`;
         }
 
-        // --- COPY TO CLIPBOARD ---
+        // --- COPY TO CLIPBOARD (copies ALL data) ---
         document.getElementById('copyBtn').addEventListener('click', function() {
             if(currentActiveData.length === 0) return;
             
-            const headers = "Agent Name\tPhone\tEmail\tAgency\tCity\tState\n";
-            const rows = currentActiveData.map(l => `${l.agentName || ''}\t${l.phone || ''}\t${l.email || ''}\t${l.agency || ''}\t${l.city || ''}\t${l.state || currentStateValue}`).join("\n");
+            const columnsToUse = currentColumns.length > 0 ? currentColumns : 
+                ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
+            
+            const headers = columnsToUse.join('\t') + '\n';
+            const rows = currentActiveData.map(row => 
+                columnsToUse.map(col => row[col] || '').join('\t')
+            ).join('\n');
             
             navigator.clipboard.writeText(headers + rows).then(() => {
                 const originalText = this.innerHTML;
@@ -271,12 +389,17 @@ const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing
             });
         });
 
-        // --- DOWNLOAD GENERATED CSV ---
+        // --- DOWNLOAD GENERATED CSV (downloads ALL data) ---
         document.getElementById('downloadBtn').addEventListener('click', function() {
             if(currentActiveData.length === 0) return;
             
-            const headers = "Agent Name,Phone,Email,Agency,City,State\n";
-            const rows = currentActiveData.map(l => `"${l.agentName || ''}","${l.phone || ''}","${l.email || ''}","${l.agency || ''}","${l.city || ''}","${l.state || currentStateValue}"`).join("\n");
+            const columnsToUse = currentColumns.length > 0 ? currentColumns : 
+                ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
+            
+            const headers = columnsToUse.map(col => `"${col}"`).join(',') + '\n';
+            const rows = currentActiveData.map(row => 
+                columnsToUse.map(col => `"${(row[col] || '').toString().replace(/"/g, '""')}"`).join(',')
+            ).join('\n');
             
             const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
