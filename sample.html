@@ -3,65 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Data Sample | Home Owner Leads</title>
+    <title>Get Free Sample | Home Owner Leads</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
+        localStorage.setItem('theme', 'dark');
+        document.documentElement.classList.add('dark');
     </script>
-    <script>
-        // Force dark mode by default unless the user explicitly saved 'light'
-        if (localStorage.getItem('theme') === 'light') {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
-    </script>
-</head>
-<body class="bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col font-sans">
+    <style>
+        /* Custom scrollbars for table and dropdown */
+        .custom-scrollbar { scrollbar-width: thin; }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
+        
+        .light-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .dark .light-scroll::-webkit-scrollbar-track { background: #1e293b; }
 
-    <!-- Navigation Area (Simplified for focus) -->
-    <nav class="py-6 px-6 text-center">
-        <a href="index.html" class="text-xl font-extrabold tracking-tight text-slate-950 dark:text-white inline-flex items-center gap-2 hover:opacity-80 transition">
-            <span class="w-3 h-3 bg-blue-600 dark:bg-blue-500 rounded-full"></span> Back to Home
-        </a>
+        /* Dropdown Animation Utilities */
+        .dropdown-open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+        .dropdown-closed {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col font-sans transition-colors duration-300">
+
+    <nav class="bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200/60 dark:border-neutral-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-950 dark:text-white flex items-center gap-2">
+                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-600 dark:bg-blue-500 rounded-full animate-pulse"></span> Home Owner Leads
+            </a>
+            <a href="index.html" class="text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white transition">← Back to Home</a>
+        </div>
     </nav>
 
-    <!-- Form Layout Wrapper -->
-    <main class="max-w-lg mx-auto px-6 py-10 flex-grow w-full">
-        <div class="bg-white dark:bg-neutral-900 p-8 md:p-10 rounded-3xl border border-slate-200/60 dark:border-neutral-800/60 shadow-xl shadow-slate-100/40 dark:shadow-none">
-            <h1 class="text-2xl font-bold tracking-tight text-slate-950 dark:text-white mb-2">Request Realtor/Zillow Sample Data</h1>
-            <p class="text-xs font-medium text-slate-500 dark:text-neutral-400 mb-8 leading-relaxed">Tell us your geographic target. We will scrape and format a free sample list of active real estate agents or property data for you to verify our quality.</p>
+    <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full">
+        <div class="text-center mb-8 sm:mb-10">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 sm:mb-4">Select Your Market</h1>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-neutral-400">Pull a live sample of our verified realtor data instantly by state.</p>
+        </div>
+
+        <div class="max-w-md mx-auto bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm mb-8 sm:mb-10">
+            <label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-neutral-300">Select US State</label>
             
-            <form action="https://formspree.io/f/xnjynler" method="POST" class="space-y-5">
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Your Name</label>
-                    <input type="text" name="name" class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required>
-                </div>
+            <div class="relative w-full" id="customSelectContainer">
+                <button id="dropdownTrigger" class="w-full flex items-center justify-between bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-slate-900 dark:text-white rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-sm">
+                    <span id="selectedStateText" class="text-slate-500 dark:text-neutral-400">Choose a State...</span>
+                    <svg id="dropdownIcon" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
                 
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Email Address</label>
-                    <input type="email" name="email" class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required>
-                </div>
+                <ul id="dropdownMenu" class="absolute z-50 w-full mt-2 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl shadow-xl max-h-60 overflow-y-auto custom-scrollbar light-scroll dropdown-closed transition-all duration-200 origin-top">
+                    </ul>
+            </div>
+        </div>
 
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Data Type Needed</label>
-                    <select name="data-type" class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm text-slate-700 dark:text-neutral-300 focus:outline-none">
-                        <option value="realtor-leads">Active Realtor & Agent Leads</option>
-                        <option value="zillow-properties">Zillow Property / Listing Extraction</option>
-                        <option value="fsbo-leads">For Sale By Owner (FSBO) Leads</option>
-                    </select>
-                </div>
+        <div id="actionContainer" class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 hidden">
+            <div class="text-sm font-medium text-slate-500 dark:text-neutral-400 text-center sm:text-left">
+                Showing <span id="recordCount" class="text-slate-900 dark:text-white font-bold">0</span> records for <span id="selectedStateBadge" class="font-bold text-blue-500"></span>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                <button id="copyBtn" class="flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-700 dark:text-neutral-200 rounded-xl text-sm font-semibold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    Copy Data
+                </button>
+                <button id="downloadBtn" class="flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition shadow-sm shadow-blue-500/20">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download CSV
+                </button>
+            </div>
+        </div>
 
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-neutral-400 mb-2">Target City & State</label>
-                    <input type="text" name="location" placeholder="e.g., Miami, FL or Austin, TX" class="w-full p-3 bg-slate-50 dark:bg-neutral-950 border border-slate-200/80 dark:border-neutral-800 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required>
-                </div>
-
-                <button type="submit" class="w-full bg-blue-600 dark:bg-blue-500 text-white py-3.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-md">Send My Free Sample</button>
-            </form>
+        <div class="custom-scrollbar rounded-2xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-x-auto shadow-sm">
+            <table class="min-w-full sm:min-w-[1000px] w-full text-sm">
+                <thead class="bg-slate-50 dark:bg-neutral-950/70 border-b border-slate-200 dark:border-neutral-800">
+                    <tr>
+                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agent Name</th>
+                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Phone</th>
+                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Email</th>
+                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agency</th>
+                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">City</th>
+                        <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">State</th>
+                    </tr>
+                </thead>
+                <tbody id="sample-tbody" class="divide-y divide-slate-100 dark:divide-neutral-800/80">
+                    <tr><td colspan="6" class="text-center py-12 px-4 text-slate-400">Select a State above to fetch live sample data.</td></tr>
+                </tbody>
+            </table>
         </div>
     </main>
 
+    <script>
+        // --- CONFIGURATION ---
+      // This tells your website to look inside the "samples" folder in your repository
+const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing-page/main/samples/';
+
+        const usStates = [
+            { code: "AL", name: "Alabama" }, { code: "AK", name: "Alaska" }, { code: "AZ", name: "Arizona" },
+            { code: "AR", name: "Arkansas" }, { code: "CA", name: "California" }, { code: "CO", name: "Colorado" },
+            { code: "CT", name: "Connecticut" }, { code: "DE", name: "Delaware" }, { code: "FL", name: "Florida" },
+            { code: "GA", name: "Georgia" }, { code: "HI", name: "Hawaii" }, { code: "ID", name: "Idaho" },
+            { code: "IL", name: "Illinois" }, { code: "IN", name: "Indiana" }, { code: "IA", name: "Iowa" },
+            { code: "KS", name: "Kansas" }, { code: "KY", name: "Kentucky" }, { code: "LA", name: "Louisiana" },
+            { code: "ME", name: "Maine" }, { code: "MD", name: "Maryland" }, { code: "MA", name: "Massachusetts" },
+            { code: "MI", name: "Michigan" }, { code: "MN", name: "Minnesota" }, { code: "MS", name: "Mississippi" },
+            { code: "MO", name: "Missouri" }, { code: "MT", name: "Montana" }, { code: "NE", name: "Nebraska" },
+            { code: "NV", name: "Nevada" }, { code: "NH", name: "New Hampshire" }, { code: "NJ", name: "New Jersey" },
+            { code: "NM", name: "New Mexico" }, { code: "NY", name: "New York" }, { code: "NC", name: "North Carolina" },
+            { code: "ND", name: "North Dakota" }, { code: "OH", name: "Ohio" }, { code: "OK", name: "Oklahoma" },
+            { code: "OR", name: "Oregon" }, { code: "PA", name: "Pennsylvania" }, { code: "RI", name: "Rhode Island" },
+            { code: "SC", name: "South Carolina" }, { code: "SD", name: "South Dakota" }, { code: "TN", name: "Tennessee" },
+            { code: "TX", name: "Texas" }, { code: "UT", name: "Utah" }, { code: "VT", name: "Vermont" },
+            { code: "VA", name: "Virginia" }, { code: "WA", name: "Washington" }, { code: "WV", name: "West Virginia" },
+            { code: "WI", name: "Wisconsin" }, { code: "WY", name: "Wyoming" }
+        ];
+
+        let currentActiveData = [];
+        let currentStateValue = "";
+
+        const dropdownTrigger = document.getElementById('dropdownTrigger');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const dropdownIcon = document.getElementById('dropdownIcon');
+        const selectedStateText = document.getElementById('selectedStateText');
+        const customSelectContainer = document.getElementById('customSelectContainer');
+        
+        const tbody = document.getElementById('sample-tbody');
+        const actionContainer = document.getElementById('actionContainer');
+        const recordCount = document.getElementById('recordCount');
+        const selectedStateBadge = document.getElementById('selectedStateBadge');
+
+        // --- CUSTOM DROPDOWN LOGIC ---
+        function initCustomDropdown() {
+            usStates.forEach(state => {
+                const li = document.createElement('li');
+                li.className = "px-4 py-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-800 dark:text-neutral-200 transition-colors border-b border-slate-100 dark:border-neutral-800/50 last:border-0";
+                li.textContent = `${state.name} (${state.code})`;
+                
+                li.addEventListener('click', () => {
+                    currentStateValue = state.code;
+                    selectedStateText.textContent = `${state.name} (${state.code})`;
+                    selectedStateText.classList.remove('text-slate-500', 'dark:text-neutral-400');
+                    selectedStateText.classList.add('text-slate-900', 'dark:text-white', 'font-medium');
+                    
+                    closeDropdown();
+                    fetchDataForState(state.code);
+                });
+                
+                dropdownMenu.appendChild(li);
+            });
+        }
+
+        function toggleDropdown() {
+            const isClosed = dropdownMenu.classList.contains('dropdown-closed');
+            if (isClosed) {
+                dropdownMenu.classList.remove('dropdown-closed');
+                dropdownMenu.classList.add('dropdown-open');
+                dropdownIcon.classList.add('rotate-180');
+            } else {
+                closeDropdown();
+            }
+        }
+
+        function closeDropdown() {
+            dropdownMenu.classList.remove('dropdown-open');
+            dropdownMenu.classList.add('dropdown-closed');
+            dropdownIcon.classList.remove('rotate-180');
+        }
+
+        dropdownTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleDropdown();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!customSelectContainer.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        // --- DATA FETCHING LOGIC ---
+        async function fetchDataForState(selectedState) {
+            clearTable(`Fetching Excel data for ${selectedState}...`);
+
+            try {
+                const fileUrl = `${GITHUB_BASE_URL}${selectedState}.xlsx`;
+                
+                const response = await fetch(fileUrl);
+                if (!response.ok) {
+                    throw new Error(`File not found (${response.status})`);
+                }
+                const arrayBuffer = await response.arrayBuffer();
+                
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                let rawData = XLSX.utils.sheet_to_json(worksheet);
+
+                currentActiveData = rawData.map(row => ({
+                    agentName: row['Agent Name'] || row['Agent'] || row['Name'] || row['agentName'] || '',
+                    phone: row['Phone'] || row['Phone Number'] || row['phone'] || '',
+                    email: row['Email'] || row['Email Address'] || row['email'] || '',
+                    agency: row['Agency'] || row['Brokerage'] || row['Company'] || row['agency'] || '',
+                    city: row['City'] || row['city'] || '',
+                    state: row['State'] || row['state'] || selectedState
+                }));
+
+                renderTable(currentActiveData, selectedState);
+
+            } catch (error) {
+                console.error(error);
+                currentActiveData = [];
+                clearTable(`No Excel file (.xlsx) found for ${selectedState} yet.`);
+            }
+        }
+
+        function renderTable(data, stateCode) {
+            if (!data || data.length === 0) {
+                clearTable(`The data file for ${stateCode} is empty or formatting is unrecognized.`);
+                return;
+            }
+
+            actionContainer.classList.remove('hidden');
+            recordCount.textContent = data.length;
+            selectedStateBadge.textContent = stateCode;
+            
+            tbody.innerHTML = data.map(lead => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-neutral-800/40 transition-colors">
+                    <td class="px-4 sm:px-5 py-3.5 font-medium text-slate-800 dark:text-neutral-200 whitespace-nowrap sm:whitespace-normal">${lead.agentName || ''}</td>
+                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap">${lead.phone || ''}</td>
+                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap sm:whitespace-normal">${lead.email || ''}</td>
+                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap sm:whitespace-normal">${lead.agency || ''}</td>
+                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap">${lead.city || ''}</td>
+                    <td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap">${lead.state || stateCode}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearTable(message) {
+            actionContainer.classList.add('hidden');
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 px-4 text-slate-400">${message}</td></tr>`;
+        }
+
+        // --- COPY TO CLIPBOARD ---
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            if(currentActiveData.length === 0) return;
+            
+            const headers = "Agent Name\tPhone\tEmail\tAgency\tCity\tState\n";
+            const rows = currentActiveData.map(l => `${l.agentName || ''}\t${l.phone || ''}\t${l.email || ''}\t${l.agency || ''}\t${l.city || ''}\t${l.state || currentStateValue}`).join("\n");
+            
+            navigator.clipboard.writeText(headers + rows).then(() => {
+                const originalText = this.innerHTML;
+                this.innerHTML = `<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!`;
+                setTimeout(() => this.innerHTML = originalText, 2000);
+            });
+        });
+
+        // --- DOWNLOAD GENERATED CSV ---
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if(currentActiveData.length === 0) return;
+            
+            const headers = "Agent Name,Phone,Email,Agency,City,State\n";
+            const rows = currentActiveData.map(l => `"${l.agentName || ''}","${l.phone || ''}","${l.email || ''}","${l.agency || ''}","${l.city || ''}","${l.state || currentStateValue}"`).join("\n");
+            
+            const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `home_owner_leads_${currentStateValue}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Run
+        initCustomDropdown();
+    </script>
 </body>
 </html>
