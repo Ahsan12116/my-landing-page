@@ -68,11 +68,16 @@
         
         .input-focus {
             transition: all 0.3s ease;
+            background-color: rgba(15, 23, 42, 0.5);
+        }
+        .dark .input-focus {
+            background-color: rgba(15, 23, 42, 0.8);
         }
         .input-focus:focus {
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
             transform: translateY(-1px);
+            background-color: rgba(15, 23, 42, 1);
         }
         
         .submit-btn {
@@ -86,14 +91,24 @@
         }
         
         .contact-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
             transition: all 0.3s ease;
+        }
+        .dark .contact-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
         }
         .contact-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
         }
         .dark .contact-card:hover {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.4);
         }
     </style>
 </head>
@@ -135,8 +150,14 @@
     </nav>
 
     <!-- Main Content Area -->
-    <main class="flex-grow w-full px-6 py-12 md:py-20">
-        <div class="max-w-5xl mx-auto">
+    <main class="flex-grow w-full px-6 py-12 md:py-20 relative">
+        <!-- Background Blur Orbs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto relative z-10">
             
             <!-- Header Section -->
             <div class="text-center mb-12">
@@ -157,7 +178,7 @@
                 
                 <!-- Contact Info Cards (Left Side) -->
                 <div class="space-y-6">
-                    <div class="contact-card bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-slate-200/60 dark:border-neutral-800/60 shadow-lg">
+                    <div class="contact-card p-6 rounded-2xl shadow-lg">
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 flex items-center justify-center mb-4">
                             <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -170,7 +191,7 @@
                         </a>
                     </div>
 
-                    <div class="contact-card bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-slate-200/60 dark:border-neutral-800/60 shadow-lg">
+                    <div class="contact-card p-6 rounded-2xl shadow-lg">
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 flex items-center justify-center mb-4">
                             <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -181,7 +202,7 @@
                         <p class="text-purple-600 dark:text-purple-400 font-semibold text-sm">Within 24 Hours</p>
                     </div>
 
-                    <div class="contact-card bg-white dark:bg-neutral-900 p-6 rounded-2xl border border-slate-200/60 dark:border-neutral-800/60 shadow-lg">
+                    <div class="contact-card p-6 rounded-2xl shadow-lg">
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 flex items-center justify-center mb-4">
                             <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
@@ -207,7 +228,7 @@
                                             type="text" 
                                             name="name" 
                                             placeholder="John Doe"
-                                            class="input-focus w-full p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-sm placeholder-slate-400 dark:placeholder-neutral-600 focus:outline-none" 
+                                            class="input-focus w-full p-3.5 border border-slate-200 dark:border-neutral-700 rounded-xl text-sm placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none text-slate-900 dark:text-neutral-100" 
                                             required
                                         >
                                     </div>
@@ -219,7 +240,7 @@
                                             type="email" 
                                             name="email" 
                                             placeholder="john@company.com"
-                                            class="input-focus w-full p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-sm placeholder-slate-400 dark:placeholder-neutral-600 focus:outline-none" 
+                                            class="input-focus w-full p-3.5 border border-slate-200 dark:border-neutral-700 rounded-xl text-sm placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none text-slate-900 dark:text-neutral-100" 
                                             required
                                         >
                                     </div>
@@ -231,7 +252,7 @@
                                     </label>
                                     <select 
                                         name="project-type" 
-                                        class="input-focus w-full p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-sm text-slate-700 dark:text-neutral-300 focus:outline-none cursor-pointer"
+                                        class="input-focus w-full p-3.5 border border-slate-200 dark:border-neutral-700 rounded-xl text-sm text-slate-700 dark:text-neutral-300 focus:outline-none cursor-pointer"
                                     >
                                         <option value="" disabled selected class="text-slate-400">Select your project type...</option>
                                         <option value="custom-script">🤖 Custom Web Scraping Script / Bot</option>
@@ -247,7 +268,7 @@
                                     </label>
                                     <select 
                                         name="budget" 
-                                        class="input-focus w-full p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-sm text-slate-700 dark:text-neutral-300 focus:outline-none cursor-pointer"
+                                        class="input-focus w-full p-3.5 border border-slate-200 dark:border-neutral-700 rounded-xl text-sm text-slate-700 dark:text-neutral-300 focus:outline-none cursor-pointer"
                                     >
                                         <option value="" disabled selected class="text-slate-400">Select budget range...</option>
                                         <option value="under-1k">Under $1,000</option>
@@ -266,13 +287,13 @@
                                     <textarea 
                                         name="details" 
                                         placeholder="Please describe the website to be scraped, the volume of data needed, or your specific CRM requirements..."
-                                        class="input-focus w-full p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl text-sm h-36 placeholder-slate-400 dark:placeholder-neutral-600 focus:outline-none resize-none" 
+                                        class="input-focus w-full p-3.5 border border-slate-200 dark:border-neutral-700 rounded-xl text-sm h-36 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none resize-none text-slate-900 dark:text-neutral-100" 
                                         required
                                     ></textarea>
                                 </div>
 
                                 <div class="flex items-start gap-3">
-                                    <input type="checkbox" id="nda" name="nda" class="mt-1 rounded border-slate-300 dark:border-neutral-700 text-blue-600 focus:ring-blue-500">
+                                    <input type="checkbox" id="nda" name="nda" class="mt-1 rounded border-slate-300 dark:border-neutral-600 text-blue-600 focus:ring-blue-500 bg-slate-50 dark:bg-neutral-800">
                                     <label for="nda" class="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">
                                         I'd like to receive an NDA before sharing sensitive project details
                                     </label>
@@ -297,9 +318,9 @@
     </main>
 
     <!-- Premium Footer -->
-    <footer class="bg-white dark:bg-neutral-900 border-t border-slate-200/60 dark:border-neutral-800/60 py-8 px-6 mt-auto">
+    <footer class="bg-white/70 dark:bg-neutral-900/70 backdrop-blur-md border-t border-slate-200/60 dark:border-neutral-800/60 py-12 px-6 mt-auto">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                         <span class="text-white font-bold text-sm">H</span>
