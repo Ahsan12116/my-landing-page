@@ -4,26 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Free Sample | Home Owner Leads</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
+        tailwind.config = { 
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'] 
+                    },
+                } 
+            } 
+        }
         localStorage.setItem('theme', 'dark');
         document.documentElement.classList.add('dark');
     </script>
     <style>
-        .custom-scrollbar { scrollbar-width: thin; }
-        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
+        * { scrollbar-width: thin; scrollbar-color: #3b82f6 #1e293b; }
+        ::-webkit-scrollbar { height: 6px; width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 10px; }
         
-        .light-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
-        .dark .light-scroll::-webkit-scrollbar-track { background: #1e293b; }
-
+        .gradient-border {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+            padding: 1px;
+            border-radius: 16px;
+        }
+        .gradient-border-inner {
+            background: #0f172a;
+            border-radius: 15px;
+        }
+        
+        .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 1);
+            border-color: rgba(148, 163, 184, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        /* TABLE - FULL WIDTH, NO HORIZONTAL SCROLL */
+        .table-scroll-container {
+            max-height: 65vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 15px;
+        }
+        
+        .responsive-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        
+        .responsive-table th {
+            background: #0f172a;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            font-weight: 600;
+            padding: 10px 6px;
+            text-align: left;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .responsive-table td {
+            padding: 9px 6px;
+            font-size: 12px;
+            color: #cbd5e1;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .responsive-table tr:hover td {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        /* Row number - narrow */
+        .responsive-table th:first-child,
+        .responsive-table td:first-child {
+            width: 32px;
+            min-width: 32px;
+            text-align: center;
+            color: #64748b;
+            font-size: 11px;
+            padding: 10px 2px;
+        }
+        
+        /* Clickable links */
+        .responsive-table td a {
+            color: #60a5fa;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .responsive-table td a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+        
+        /* Price styling */
+        .price-cell {
+            color: #34d399 !important;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Mobile: card layout */
+        @media (max-width: 767px) {
+            .responsive-table thead { display: none; }
+            
+            .responsive-table tbody tr {
+                display: block;
+                margin-bottom: 10px;
+                border: 1px solid rgba(148, 163, 184, 0.1);
+                border-radius: 12px;
+                background: rgba(15, 23, 42, 0.6);
+                padding: 2px;
+            }
+            
+            .responsive-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 7px 10px;
+                border-bottom: 1px solid rgba(148, 163, 184, 0.05);
+                white-space: nowrap;
+                max-width: 100%;
+                font-size: 13px;
+            }
+            
+            .responsive-table td:last-child { border-bottom: none; }
+            
+            .responsive-table td:first-child {
+                width: 100%;
+                min-width: 100%;
+                text-align: left;
+                justify-content: flex-start;
+                font-weight: 700;
+                font-size: 13px;
+                color: #93c5fd;
+                background: rgba(59, 130, 246, 0.08);
+                border-radius: 10px 10px 0 0;
+            }
+            
+            .responsive-table td:not(:first-child)::before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 10px;
+                color: #64748b;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                margin-right: 8px;
+                flex-shrink: 0;
+                min-width: 50px;
+            }
+            
+            .responsive-table td:first-child::before { display: none; }
+        }
+        
+        @media (min-width: 768px) {
+            .responsive-table th, .responsive-table td { padding: 10px 8px; }
+        }
+        
+        @media (min-width: 1024px) {
+            .responsive-table th, .responsive-table td { padding: 11px 10px; font-size: 13px; }
+        }
+        
+        .dropdown-item {
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            padding-left: 20px;
+        }
+        
         .dropdown-open {
             opacity: 1;
             transform: scale(1) translateY(0);
@@ -36,222 +219,181 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col font-sans transition-colors duration-300">
+<body class="bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-slate-100 antialiased min-h-screen flex flex-col font-sans">
 
-    <nav class="bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200/60 dark:border-neutral-800/60">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-950 dark:text-white flex items-center gap-2">
-                <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-600 dark:bg-blue-500 rounded-full animate-pulse"></span> Home Owner Leads
+    <nav class="bg-slate-900/80 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-700/50">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 shrink-0">
+                <div class="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full pulse-dot"></div>
+                <span class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Home Owner Leads</span>
             </a>
-            <a href="index.html" class="text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white transition">← Back to Home</a>
+            <a href="index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-all shrink-0">← Back</a>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full">
-        <div class="text-center mb-8 sm:mb-10">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 sm:mb-4">Select Your Market</h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-neutral-400">Pull a live sample of our verified realtor data instantly by state.</p>
+    <main class="flex-grow w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+        <div class="text-center mb-6 sm:mb-8">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-4">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                <span class="text-sm font-medium text-blue-400">Live Data Sample</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-2">
+                <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Select Your Market</span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-400">Pull a live sample of verified realtor data. All records shown.</p>
         </div>
 
-        <div class="max-w-md mx-auto bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm mb-8 sm:mb-10">
-            <label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-neutral-300">Select US State</label>
-            
-            <div class="relative w-full" id="customSelectContainer">
-                <button id="dropdownTrigger" class="w-full flex items-center justify-between bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-slate-900 dark:text-white rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-sm">
-                    <span id="selectedStateText" class="text-slate-500 dark:text-neutral-400">Choose a State...</span>
-                    <svg id="dropdownIcon" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                
-                <ul id="dropdownMenu" class="absolute z-50 w-full mt-2 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl shadow-xl max-h-60 overflow-y-auto custom-scrollbar light-scroll dropdown-closed transition-all duration-200 origin-top">
-                </ul>
+        <div class="max-w-lg mx-auto mb-6">
+            <div class="gradient-border">
+                <div class="gradient-border-inner p-5 sm:p-6" style="overflow: visible;">
+                    <label class="block text-sm font-semibold mb-3 text-slate-300">📍 Select US State</label>
+                    <div class="relative w-full" id="customSelectContainer" style="z-index: 40;">
+                        <button id="dropdownTrigger" class="w-full flex items-center justify-between bg-slate-800/50 border border-slate-700/50 text-white rounded-xl px-5 py-3.5 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all hover:border-slate-600/50">
+                            <span id="selectedStateText" class="text-slate-400">Choose a State...</span>
+                            <svg id="dropdownIcon" class="w-5 h-5 text-slate-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <ul id="dropdownMenu" class="absolute z-50 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl max-h-64 overflow-y-auto dropdown-closed transition-all duration-300 origin-top" style="left: 0; right: 0;"></ul>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="actionContainer" class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 hidden">
-            <div class="text-sm font-medium text-slate-500 dark:text-neutral-400 text-center sm:text-left">
-                Showing <span id="recordCount" class="text-slate-900 dark:text-white font-bold">0</span> records for <span id="selectedStateBadge" class="font-bold text-blue-500"></span>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                    <span id="recordCount" class="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">0</span>
+                </div>
+                <div>
+                    <div class="text-sm font-medium text-slate-300">Total Records</div>
+                    <div class="text-xs text-slate-500">for <span id="selectedStateBadge" class="font-semibold text-blue-400"></span></div>
+                </div>
             </div>
-            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                <button id="copyBtn" class="flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-700 dark:text-neutral-200 rounded-xl text-sm font-semibold transition">
+            <div class="flex gap-3">
+                <button id="copyBtn" class="btn-secondary flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                    Copy Data
+                    Copy All
                 </button>
-                <button id="downloadBtn" class="flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition shadow-sm shadow-blue-500/20">
+                <button id="downloadBtn" class="btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     Download CSV
                 </button>
             </div>
         </div>
 
-        <div class="custom-scrollbar rounded-2xl border border-slate-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-x-auto shadow-sm">
-            <table class="min-w-full w-full text-sm" id="dataTable">
-                <thead id="tableHeader" class="bg-slate-50 dark:bg-neutral-950/70 border-b border-slate-200 dark:border-neutral-800">
-                    <!-- Headers will be dynamically generated -->
-                </thead>
-                <tbody id="sample-tbody" class="divide-y divide-slate-100 dark:divide-neutral-800/80">
-                    <tr><td colspan="6" class="text-center py-12 px-4 text-slate-400">Select a State above to fetch live sample data.</td></tr>
-                </tbody>
-            </table>
+        <div class="gradient-border">
+            <div class="gradient-border-inner table-scroll-container">
+                <table class="responsive-table" id="dataTable">
+                    <thead id="tableHeader"></thead>
+                    <tbody id="sample-tbody">
+                        <tr><td colspan="10" class="text-center py-16 text-slate-500" style="white-space: normal;">Select a state above to fetch live sample data.</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
     <script>
         const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing-page/main/samples/';
-
         const usStates = [
-            { code: "AL", name: "Alabama" }, { code: "AK", name: "Alaska" }, { code: "AZ", name: "Arizona" },
-            { code: "AR", name: "Arkansas" }, { code: "CA", name: "California" }, { code: "CO", name: "Colorado" },
-            { code: "CT", name: "Connecticut" }, { code: "DE", name: "Delaware" }, { code: "FL", name: "Florida" },
-            { code: "GA", name: "Georgia" }, { code: "HI", name: "Hawaii" }, { code: "ID", name: "Idaho" },
-            { code: "IL", name: "Illinois" }, { code: "IN", name: "Indiana" }, { code: "IA", name: "Iowa" },
-            { code: "KS", name: "Kansas" }, { code: "KY", name: "Kentucky" }, { code: "LA", name: "Louisiana" },
-            { code: "ME", name: "Maine" }, { code: "MD", name: "Maryland" }, { code: "MA", name: "Massachusetts" },
-            { code: "MI", name: "Michigan" }, { code: "MN", name: "Minnesota" }, { code: "MS", name: "Mississippi" },
-            { code: "MO", name: "Missouri" }, { code: "MT", name: "Montana" }, { code: "NE", name: "Nebraska" },
-            { code: "NV", name: "Nevada" }, { code: "NH", name: "New Hampshire" }, { code: "NJ", name: "New Jersey" },
-            { code: "NM", name: "New Mexico" }, { code: "NY", name: "New York" }, { code: "NC", name: "North Carolina" },
-            { code: "ND", name: "North Dakota" }, { code: "OH", name: "Ohio" }, { code: "OK", name: "Oklahoma" },
-            { code: "OR", name: "Oregon" }, { code: "PA", name: "Pennsylvania" }, { code: "RI", name: "Rhode Island" },
-            { code: "SC", name: "South Carolina" }, { code: "SD", name: "South Dakota" }, { code: "TN", name: "Tennessee" },
-            { code: "TX", name: "Texas" }, { code: "UT", name: "Utah" }, { code: "VT", name: "Vermont" },
-            { code: "VA", name: "Virginia" }, { code: "WA", name: "Washington" }, { code: "WV", name: "West Virginia" },
-            { code: "WI", name: "Wisconsin" }, { code: "WY", name: "Wyoming" }
+            { code: "AL", name: "Alabama" },{ code: "AK", name: "Alaska" },{ code: "AZ", name: "Arizona" },
+            { code: "AR", name: "Arkansas" },{ code: "CA", name: "California" },{ code: "CO", name: "Colorado" },
+            { code: "CT", name: "Connecticut" },{ code: "DE", name: "Delaware" },{ code: "FL", name: "Florida" },
+            { code: "GA", name: "Georgia" },{ code: "HI", name: "Hawaii" },{ code: "ID", name: "Idaho" },
+            { code: "IL", name: "Illinois" },{ code: "IN", name: "Indiana" },{ code: "IA", name: "Iowa" },
+            { code: "KS", name: "Kansas" },{ code: "KY", name: "Kentucky" },{ code: "LA", name: "Louisiana" },
+            { code: "ME", name: "Maine" },{ code: "MD", name: "Maryland" },{ code: "MA", name: "Massachusetts" },
+            { code: "MI", name: "Michigan" },{ code: "MN", name: "Minnesota" },{ code: "MS", name: "Mississippi" },
+            { code: "MO", name: "Missouri" },{ code: "MT", name: "Montana" },{ code: "NE", name: "Nebraska" },
+            { code: "NV", name: "Nevada" },{ code: "NH", name: "New Hampshire" },{ code: "NJ", name: "New Jersey" },
+            { code: "NM", name: "New Mexico" },{ code: "NY", name: "New York" },{ code: "NC", name: "North Carolina" },
+            { code: "ND", name: "North Dakota" },{ code: "OH", name: "Ohio" },{ code: "OK", name: "Oklahoma" },
+            { code: "OR", name: "Oregon" },{ code: "PA", name: "Pennsylvania" },{ code: "RI", name: "Rhode Island" },
+            { code: "SC", name: "South Carolina" },{ code: "SD", name: "South Dakota" },{ code: "TN", name: "Tennessee" },
+            { code: "TX", name: "Texas" },{ code: "UT", name: "Utah" },{ code: "VT", name: "Vermont" },
+            { code: "VA", name: "Virginia" },{ code: "WA", name: "Washington" },{ code: "WV", name: "West Virginia" },
+            { code: "WI", name: "Wisconsin" },{ code: "WY", name: "Wyoming" }
         ];
 
-        let currentActiveData = [];
-        let currentStateValue = "";
-        let currentColumns = [];
-
+        let currentActiveData = [], currentStateValue = "", currentColumns = [];
         const dropdownTrigger = document.getElementById('dropdownTrigger');
         const dropdownMenu = document.getElementById('dropdownMenu');
         const dropdownIcon = document.getElementById('dropdownIcon');
         const selectedStateText = document.getElementById('selectedStateText');
         const customSelectContainer = document.getElementById('customSelectContainer');
-        
         const tbody = document.getElementById('sample-tbody');
         const tableHeader = document.getElementById('tableHeader');
         const actionContainer = document.getElementById('actionContainer');
         const recordCount = document.getElementById('recordCount');
         const selectedStateBadge = document.getElementById('selectedStateBadge');
 
-        // --- ENHANCED HEADER DETECTION ---
-        function findColumnValue(row, possibleNames) {
-            // Try each possible header name (case-insensitive)
-            for (let name of possibleNames) {
-                // Check exact match
-                if (row[name] !== undefined) return row[name];
-                
-                // Check case-insensitive match
-                const foundKey = Object.keys(row).find(key => 
-                    key.toLowerCase().trim() === name.toLowerCase().trim()
-                );
-                if (foundKey) return row[foundKey];
-                
-                // Check if any key contains the name (partial match)
-                const partialKey = Object.keys(row).find(key => 
-                    key.toLowerCase().includes(name.toLowerCase())
-                );
-                if (partialKey) return row[partialKey];
+        function isURL(text) {
+            if (!text) return false;
+            const str = String(text).trim();
+            return /^https?:\/\//i.test(str) || /^www\./i.test(str) || /\.(com|org|net|io|co|gov|edu)\b/i.test(str);
+        }
+
+        function isEmail(text) {
+            if (!text) return false;
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(text).trim());
+        }
+
+        function isPhone(text) {
+            if (!text) return false;
+            const cleaned = String(text).replace(/[\s\-\(\)\.]/g, '');
+            return /^\+?\d{7,15}$/.test(cleaned);
+        }
+
+        function isPrice(text) {
+            if (!text) return false;
+            const str = String(text).trim();
+            if (str.startsWith('$')) return true;
+            const cleaned = str.replace(/[,$]/g, '');
+            return /^\d{3,}$/.test(cleaned) && parseFloat(cleaned) > 100;
+        }
+
+        function formatCell(value) {
+            if (value === null || value === undefined || value === '') return '—';
+            const str = String(value).trim();
+            
+            if (isURL(str)) {
+                let href = str;
+                if (!href.startsWith('http')) href = 'https://' + href;
+                return `<a href="${href}" target="_blank" rel="noopener" title="${str}">🔗 ${str.length > 40 ? str.substring(0, 40) + '...' : str}</a>`;
             }
-            return '';
+            
+            if (isEmail(str)) {
+                return `<a href="mailto:${str}" title="${str}">📧 ${str.length > 30 ? str.substring(0, 30) + '...' : str}</a>`;
+            }
+            
+            if (isPhone(str)) {
+                const cleaned = str.replace(/[\s\-\(\)\.]/g, '');
+                return `<a href="tel:${cleaned}" title="${str}">📞 ${str}</a>`;
+            }
+            
+            if (isPrice(str)) {
+                let num = str.replace(/[$,]/g, '');
+                if (!str.startsWith('$')) {
+                    return `<span class="price-cell">$${Number(num).toLocaleString()}</span>`;
+                }
+                return `<span class="price-cell">${str}</span>`;
+            }
+            
+            return str;
         }
 
-        function normalizeData(rawData, selectedState) {
-            return rawData.map(row => {
-                // Create object with all original columns preserved
-                let mappedRow = { ...row };
-                
-                // Agent Name variations
-                mappedRow._agentName = findColumnValue(row, [
-                    'Agent Name', 'Agent', 'Name', 'agent name', 'agent', 'name',
-                    'AgentName', 'agentname', 'Full Name', 'full name', 'FullName',
-                    'Contact Name', 'contact name', 'ContactName',
-                    'Realtor Name', 'realtor name', 'RealtorName',
-                    'First Name', 'first name', 'FirstName'
-                ]);
-                
-                // Phone variations
-                mappedRow._phone = findColumnValue(row, [
-                    'Phone', 'Phone Number', 'phone', 'phone number',
-                    'Agent Phone', 'agent phone', 'AgentPhone',
-                    'Contact Phone', 'contact phone', 'ContactPhone',
-                    'Phone #', 'phone #', 'Phone#',
-                    'Telephone', 'telephone', 'Tel', 'tel',
-                    'Mobile', 'mobile', 'Cell', 'cell',
-                    'Mobile Phone', 'mobile phone', 'MobilePhone',
-                    'Cell Phone', 'cell phone', 'CellPhone',
-                    'Work Phone', 'work phone', 'WorkPhone'
-                ]);
-                
-                // Email variations
-                mappedRow._email = findColumnValue(row, [
-                    'Email', 'Email Address', 'email', 'email address',
-                    'Agent Email', 'agent email', 'AgentEmail',
-                    'Contact Email', 'contact email', 'ContactEmail',
-                    'E-mail', 'e-mail', 'EmailAddress',
-                    'Work Email', 'work email', 'WorkEmail'
-                ]);
-                
-                // Agency/Brokerage variations
-                mappedRow._agency = findColumnValue(row, [
-                    'Agency', 'agency', 'Agency Name', 'agency name',
-                    'Brokerage', 'brokerage', 'Brokerage Name', 'brokerage name',
-                    'Company', 'company', 'Company Name', 'company name',
-                    'AgencyName', 'BrokerageName', 'CompanyName',
-                    'Firm', 'firm', 'Firm Name', 'firm name',
-                    'Office', 'office', 'Office Name', 'office name',
-                    'Business Name', 'business name', 'BusinessName',
-                    'Organization', 'organization', 'Organization Name'
-                ]);
-                
-                // City variations
-                mappedRow._city = findColumnValue(row, [
-                    'City', 'city', 'City Name', 'city name',
-                    'Location', 'location', 'Town', 'town',
-                    'Municipality', 'municipality'
-                ]);
-                
-                // State variations
-                mappedRow._state = findColumnValue(row, [
-                    'State', 'state', 'State Name', 'state name',
-                    'Province', 'province', 'Region', 'region'
-                ]) || selectedState;
-                
-                // Address variations (additional common field)
-                mappedRow._address = findColumnValue(row, [
-                    'Address', 'address', 'Street Address', 'street address',
-                    'Street', 'street', 'Office Address', 'office address',
-                    'Business Address', 'business address'
-                ]);
-                
-                // Zip/Postal Code variations
-                mappedRow._zip = findColumnValue(row, [
-                    'Zip', 'zip', 'Zip Code', 'zip code',
-                    'Postal Code', 'postal code', 'ZipCode', 'PostalCode',
-                    'Post Code', 'post code'
-                ]);
-                
-                return mappedRow;
-            });
-        }
-
-        // --- CUSTOM DROPDOWN LOGIC ---
         function initCustomDropdown() {
             usStates.forEach(state => {
                 const li = document.createElement('li');
-                li.className = "px-4 py-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-800 dark:text-neutral-200 transition-colors border-b border-slate-100 dark:border-neutral-800/50 last:border-0";
-                li.textContent = `${state.name} (${state.code})`;
-                
+                li.className = "dropdown-item px-5 py-3 text-slate-300 border-b border-slate-700/30 last:border-0 flex items-center gap-3";
+                li.innerHTML = `<span class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center text-xs font-bold text-blue-400">${state.code}</span><span>${state.name}</span>`;
                 li.addEventListener('click', () => {
                     currentStateValue = state.code;
                     selectedStateText.textContent = `${state.name} (${state.code})`;
-                    selectedStateText.classList.remove('text-slate-500', 'dark:text-neutral-400');
-                    selectedStateText.classList.add('text-slate-900', 'dark:text-white', 'font-medium');
-                    
+                    selectedStateText.classList.remove('text-slate-400');
+                    selectedStateText.classList.add('text-white', 'font-medium');
                     closeDropdown();
                     fetchDataForState(state.code);
                 });
-                
                 dropdownMenu.appendChild(li);
             });
         }
@@ -262,9 +404,7 @@
                 dropdownMenu.classList.remove('dropdown-closed');
                 dropdownMenu.classList.add('dropdown-open');
                 dropdownIcon.classList.add('rotate-180');
-            } else {
-                closeDropdown();
-            }
+            } else { closeDropdown(); }
         }
 
         function closeDropdown() {
@@ -273,145 +413,90 @@
             dropdownIcon.classList.remove('rotate-180');
         }
 
-        dropdownTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleDropdown();
-        });
+        dropdownTrigger.addEventListener('click', (e) => { e.preventDefault(); toggleDropdown(); });
+        document.addEventListener('click', (e) => { if (!customSelectContainer.contains(e.target)) closeDropdown(); });
 
-        document.addEventListener('click', (e) => {
-            if (!customSelectContainer.contains(e.target)) {
-                closeDropdown();
-            }
-        });
-
-        // --- DATA FETCHING LOGIC ---
         async function fetchDataForState(selectedState) {
-            clearTable(`Fetching Excel data for ${selectedState}...`);
-
+            clearTable(`Fetching data for ${selectedState}...`);
             try {
                 const fileUrl = `${GITHUB_BASE_URL}${selectedState}.xlsx`;
-                
                 const response = await fetch(fileUrl);
-                if (!response.ok) {
-                    throw new Error(`File not found (${response.status})`);
-                }
+                if (!response.ok) throw new Error(`File not found`);
                 const arrayBuffer = await response.arrayBuffer();
-                
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                 let rawData = XLSX.utils.sheet_to_json(worksheet);
-
-                // Normalize data with enhanced header detection
-                currentActiveData = normalizeData(rawData, selectedState);
-                
-                // Get all column headers from the first row
+                currentActiveData = rawData.map(row => ({ ...row }));
                 currentColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
-
                 renderTable(currentActiveData, selectedState);
-
             } catch (error) {
-                console.error(error);
-                currentActiveData = [];
-                currentColumns = [];
-                clearTable(`No Excel file (.xlsx) found for ${selectedState} yet.`);
+                currentActiveData = []; currentColumns = [];
+                clearTable(`No data file found for ${selectedState} yet.`);
             }
         }
 
         function renderTable(data, stateCode) {
-            if (!data || data.length === 0) {
-                clearTable(`The data file for ${stateCode} is empty or formatting is unrecognized.`);
-                return;
+            if (!data || data.length === 0) { 
+                clearTable(`The data file for ${stateCode} is empty.`); 
+                return; 
             }
 
-            // Only take first 20 records for display
-            const displayData = data.slice(0, 20);
-            
+            // ⭐ SHOW ALL RECORDS - removed .slice(0, 20)
             actionContainer.classList.remove('hidden');
-            // Show count of total records available vs showing
-            recordCount.innerHTML = `20 of ${data.length}`;
+            recordCount.textContent = data.length; // Total count
             selectedStateBadge.textContent = stateCode;
             
-            // Generate table headers dynamically from ALL original columns
             const columnsToShow = currentColumns.length > 0 ? currentColumns : 
                 ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
             
-            tableHeader.innerHTML = `
-                <tr>
-                    ${columnsToShow.map(col => 
-                        `<th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">${col}</th>`
-                    ).join('')}
-                </tr>
-            `;
+            const colWidth = Math.floor(100 / (columnsToShow.length + 1));
+            const colStyle = `width: ${colWidth}%;`;
             
-            // Generate table rows with only 20 records using ORIGINAL column names
-            tbody.innerHTML = displayData.map(lead => `
-                <tr class="hover:bg-slate-50 dark:hover:bg-neutral-800/40 transition-colors">
-                    ${columnsToShow.map(col => 
-                        `<td class="px-4 sm:px-5 py-3.5 text-slate-700 dark:text-neutral-300 whitespace-nowrap sm:whitespace-normal">${lead[col] || ''}</td>`
-                    ).join('')}
+            tableHeader.innerHTML = `<tr><th style="width: 32px;">#</th>${columnsToShow.map(col => `<th style="${colStyle}">${col}</th>`).join('')}</tr>`;
+            
+            // ⭐ RENDER ALL ROWS - no limit
+            tbody.innerHTML = data.map((lead, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    ${columnsToShow.map(col => {
+                        const value = lead[col] || '';
+                        const formatted = formatCell(value);
+                        return `<td data-label="${col}" style="${colStyle}">${formatted}</td>`;
+                    }).join('')}
                 </tr>
             `).join('');
         }
 
         function clearTable(message) {
             actionContainer.classList.add('hidden');
-            tableHeader.innerHTML = `
-                <tr>
-                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agent Name</th>
-                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Phone</th>
-                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Email</th>
-                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">Agency</th>
-                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">City</th>
-                    <th class="px-4 sm:px-5 py-4 text-left font-semibold text-slate-700 dark:text-neutral-300 whitespace-nowrap">State</th>
-                </tr>
-            `;
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 px-4 text-slate-400">${message}</td></tr>`;
+            tableHeader.innerHTML = `<tr><th style="width: 32px;">#</th><th>Agent Name</th><th>Phone</th><th>Email</th><th>Agency</th><th>City</th><th>State</th></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-16 text-slate-500" style="white-space: normal;">${message}</td></tr>`;
         }
 
-        // --- COPY TO CLIPBOARD (copies ALL data) ---
         document.getElementById('copyBtn').addEventListener('click', function() {
             if(currentActiveData.length === 0) return;
-            
-            const columnsToUse = currentColumns.length > 0 ? currentColumns : 
-                ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
-            
+            const columnsToUse = currentColumns.length > 0 ? currentColumns : ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
             const headers = columnsToUse.join('\t') + '\n';
-            const rows = currentActiveData.map(row => 
-                columnsToUse.map(col => row[col] || '').join('\t')
-            ).join('\n');
-            
+            const rows = currentActiveData.map(row => columnsToUse.map(col => row[col] || '').join('\t')).join('\n');
             navigator.clipboard.writeText(headers + rows).then(() => {
-                const originalText = this.innerHTML;
-                this.innerHTML = `<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!`;
-                setTimeout(() => this.innerHTML = originalText, 2000);
+                const orig = this.innerHTML;
+                this.innerHTML = `<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!`;
+                setTimeout(() => this.innerHTML = orig, 2000);
             });
         });
 
-        // --- DOWNLOAD GENERATED CSV (downloads ALL data) ---
         document.getElementById('downloadBtn').addEventListener('click', function() {
             if(currentActiveData.length === 0) return;
-            
-            const columnsToUse = currentColumns.length > 0 ? currentColumns : 
-                ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
-            
+            const columnsToUse = currentColumns.length > 0 ? currentColumns : ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
             const headers = columnsToUse.map(col => `"${col}"`).join(',') + '\n';
-            const rows = currentActiveData.map(row => 
-                columnsToUse.map(col => `"${(row[col] || '').toString().replace(/"/g, '""')}"`).join(',')
-            ).join('\n');
-            
+            const rows = currentActiveData.map(row => columnsToUse.map(col => `"${(row[col]||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
             const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `home_owner_leads_${currentStateValue}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            link.href = URL.createObjectURL(blob);
+            link.download = `home_owner_leads_${currentStateValue}.csv`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         });
 
-        // Run
         initCustomDropdown();
     </script>
 </body>
