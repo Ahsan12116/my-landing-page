@@ -62,7 +62,6 @@
             transform: translateY(-1px);
         }
         
-        /* TABLE - FULL WIDTH, NO HORIZONTAL SCROLL */
         .table-scroll-container {
             max-height: 65vh;
             overflow-y: auto;
@@ -92,6 +91,32 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            cursor: default;
+            position: relative;
+        }
+        
+        /* HEADER HOVER TOOLTIP */
+        .responsive-table th:hover {
+            overflow: visible;
+            z-index: 30;
+        }
+        
+        .responsive-table th:hover .header-content {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background: #1e293b;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 6px;
+            padding: 6px 10px;
+            white-space: nowrap;
+            z-index: 30;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #e2e8f0;
         }
         
         .responsive-table td {
@@ -102,13 +127,34 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            position: relative;
+        }
+        
+        /* CELL HOVER TOOLTIP */
+        .responsive-table td:hover {
+            overflow: visible;
+            z-index: 5;
+        }
+        
+        .responsive-table td:hover .cell-content {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background: #1e293b;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            padding: 4px 8px;
+            white-space: nowrap;
+            z-index: 20;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
         }
         
         .responsive-table tr:hover td {
             background: rgba(59, 130, 246, 0.05);
         }
         
-        /* Row number - narrow */
         .responsive-table th:first-child,
         .responsive-table td:first-child {
             width: 32px;
@@ -119,7 +165,6 @@
             padding: 10px 2px;
         }
         
-        /* Clickable links */
         .responsive-table td a {
             color: #60a5fa;
             text-decoration: none;
@@ -130,17 +175,13 @@
             text-decoration: underline;
         }
         
-        /* Price styling */
         .price-cell {
             color: #34d399 !important;
             font-weight: 600;
-            font-variant-numeric: tabular-nums;
         }
         
-        /* Mobile: card layout */
         @media (max-width: 767px) {
             .responsive-table thead { display: none; }
-            
             .responsive-table tbody tr {
                 display: block;
                 margin-bottom: 10px;
@@ -149,7 +190,6 @@
                 background: rgba(15, 23, 42, 0.6);
                 padding: 2px;
             }
-            
             .responsive-table td {
                 display: flex;
                 justify-content: space-between;
@@ -159,10 +199,9 @@
                 white-space: nowrap;
                 max-width: 100%;
                 font-size: 13px;
+                overflow: visible;
             }
-            
             .responsive-table td:last-child { border-bottom: none; }
-            
             .responsive-table td:first-child {
                 width: 100%;
                 min-width: 100%;
@@ -174,7 +213,6 @@
                 background: rgba(59, 130, 246, 0.08);
                 border-radius: 10px 10px 0 0;
             }
-            
             .responsive-table td:not(:first-child)::before {
                 content: attr(data-label);
                 font-weight: 600;
@@ -186,8 +224,15 @@
                 flex-shrink: 0;
                 min-width: 50px;
             }
-            
             .responsive-table td:first-child::before { display: none; }
+            .responsive-table td:hover .cell-content {
+                position: fixed;
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                max-width: 90vw;
+            }
         }
         
         @media (min-width: 768px) {
@@ -326,10 +371,22 @@
         const recordCount = document.getElementById('recordCount');
         const selectedStateBadge = document.getElementById('selectedStateBadge');
 
+        function filterColumns(columns) {
+            return columns.filter(col => {
+                const lower = col.toLowerCase().trim();
+                if (/(phone|mobile|cell|tel|fax).*(2|ii|second|alt|other|alternate|additional|extra)/i.test(lower)) return false;
+                if (/(2|ii|second|alt|other|alternate|additional|extra).*(phone|mobile|cell|tel|fax)/i.test(lower)) return false;
+                if (/phone\s*2|phone\s*#2|phone\s*ii/i.test(lower)) return false;
+                if (/mobile\s*2|cell\s*2|tel\s*2/i.test(lower)) return false;
+                return true;
+            });
+        }
+
         function isURL(text) {
             if (!text) return false;
             const str = String(text).trim();
-            return /^https?:\/\//i.test(str) || /^www\./i.test(str) || /\.(com|org|net|io|co|gov|edu)\b/i.test(str);
+            if (str.includes('@')) return false;
+            return /^https?:\/\//i.test(str) || /^www\./i.test(str) || /\.(com|org|net|io|co|gov|edu|us|info|biz)\b/i.test(str);
         }
 
         function isEmail(text) {
@@ -337,10 +394,12 @@
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(text).trim());
         }
 
-        function isPhone(text) {
-            if (!text) return false;
-            const cleaned = String(text).replace(/[\s\-\(\)\.]/g, '');
-            return /^\+?\d{7,15}$/.test(cleaned);
+        function extractFirstPhone(text) {
+            if (!text) return '';
+            const str = String(text).trim();
+            const phoneRegex = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
+            const matches = str.match(phoneRegex);
+            return matches && matches.length > 0 ? matches[0].trim() : '';
         }
 
         function isPrice(text) {
@@ -355,19 +414,21 @@
             if (value === null || value === undefined || value === '') return '—';
             const str = String(value).trim();
             
+            if (isEmail(str)) {
+                return `<a href="mailto:${str}" title="Send email to ${str}">📧 ${str}</a>`;
+            }
+            
             if (isURL(str)) {
                 let href = str;
                 if (!href.startsWith('http')) href = 'https://' + href;
-                return `<a href="${href}" target="_blank" rel="noopener" title="${str}">🔗 ${str.length > 40 ? str.substring(0, 40) + '...' : str}</a>`;
+                const display = str.length > 40 ? str.substring(0, 40) + '...' : str;
+                return `<a href="${href}" target="_blank" rel="noopener" title="Open ${str}">🔗 ${display}</a>`;
             }
             
-            if (isEmail(str)) {
-                return `<a href="mailto:${str}" title="${str}">📧 ${str.length > 30 ? str.substring(0, 30) + '...' : str}</a>`;
-            }
-            
-            if (isPhone(str)) {
-                const cleaned = str.replace(/[\s\-\(\)\.]/g, '');
-                return `<a href="tel:${cleaned}" title="${str}">📞 ${str}</a>`;
+            const firstPhone = extractFirstPhone(str);
+            if (firstPhone) {
+                const cleaned = firstPhone.replace(/[\s\-\(\)\.]/g, '');
+                return `<a href="tel:${cleaned}" title="Call ${firstPhone}">📞 ${firstPhone}</a>`;
             }
             
             if (isPrice(str)) {
@@ -427,7 +488,8 @@
                 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                 let rawData = XLSX.utils.sheet_to_json(worksheet);
                 currentActiveData = rawData.map(row => ({ ...row }));
-                currentColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
+                const allColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
+                currentColumns = filterColumns(allColumns);
                 renderTable(currentActiveData, selectedState);
             } catch (error) {
                 currentActiveData = []; currentColumns = [];
@@ -441,9 +503,8 @@
                 return; 
             }
 
-            // ⭐ SHOW ALL RECORDS - removed .slice(0, 20)
             actionContainer.classList.remove('hidden');
-            recordCount.textContent = data.length; // Total count
+            recordCount.textContent = data.length;
             selectedStateBadge.textContent = stateCode;
             
             const columnsToShow = currentColumns.length > 0 ? currentColumns : 
@@ -452,16 +513,22 @@
             const colWidth = Math.floor(100 / (columnsToShow.length + 1));
             const colStyle = `width: ${colWidth}%;`;
             
-            tableHeader.innerHTML = `<tr><th style="width: 32px;">#</th>${columnsToShow.map(col => `<th style="${colStyle}">${col}</th>`).join('')}</tr>`;
+            // HEADERS with hover tooltip via title attribute + span wrapper
+            tableHeader.innerHTML = `<tr>
+                <th style="width: 32px;">#</th>
+                ${columnsToShow.map(col => 
+                    `<th style="${colStyle}" title="${col}"><span class="header-content">${col}</span></th>`
+                ).join('')}
+            </tr>`;
             
-            // ⭐ RENDER ALL ROWS - no limit
             tbody.innerHTML = data.map((lead, index) => `
                 <tr>
                     <td>${index + 1}</td>
                     ${columnsToShow.map(col => {
                         const value = lead[col] || '';
                         const formatted = formatCell(value);
-                        return `<td data-label="${col}" style="${colStyle}">${formatted}</td>`;
+                        const plainText = String(value || '—').replace(/"/g, '&quot;');
+                        return `<td data-label="${col}" style="${colStyle}" title="${plainText}"><span class="cell-content">${formatted}</span></td>`;
                     }).join('')}
                 </tr>
             `).join('');
