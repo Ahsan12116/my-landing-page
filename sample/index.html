@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HLGPQ47PK8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HLGPQ47PK8');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Free Sample | Home Owner Leads</title>
+ <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6' /%3E%3Cstop offset='50%25' stop-color='%236366f1' /%3E%3Cstop offset='100%25' stop-color='%239333ea' /%3E%3C/linearGradient%3E%3ClinearGradient id='text-grad' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff' /%3E%3Cstop offset='100%25' stop-color='%23e2e8f0' /%3E%3C/linearGradient%3E%3Cfilter id='shadow' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='2' stdDeviation='2' flood-color='%23000000' flood-opacity='0.3' /%3E%3C/filter%3E%3C/defs%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='url(%23bg-grad)' stroke='rgba(255,255,255,0.15)' stroke-width='2' /%3E%3Cg filter='url(%23shadow)' fill='url(%23text-grad)'%3E%3Crect x='18' y='16' width='8' height='32' rx='2' /%3E%3Crect x='38' y='16' width='8' height='32' rx='2' /%3E%3Crect x='24' y='28' width='16' height='8' rx='1' /%3E%3C/g%3E%3C/svg%3E">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    
+    <script>
+        tailwind.config = { 
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'] 
+                    },
+                } 
+            } 
+        }
+        localStorage.setItem('theme', 'dark');
+        document.documentElement.classList.add('dark');
+    </script>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #3b82f6 #1e293b; }
+        ::-webkit-scrollbar { height: 6px; width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 10px; }
+        
+        .gradient-border {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+            padding: 1px;
+            border-radius: 16px;
+        }
+        .gradient-border-inner {
+            background: #0f172a;
+            border-radius: 15px;
+        }
+        
+        .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 1);
+            border-color: rgba(148, 163, 184, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .table-scroll-container {
+            max-height: 65vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 15px;
+        }
+        
+        .responsive-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        
+        .responsive-table th {
+            background: #0f172a;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            font-weight: 600;
+            padding: 10px 6px;
+            text-align: left;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: default;
+            position: relative;
+        }
+        
+        .responsive-table th:hover {
+            overflow: visible;
+            z-index: 30;
+        }
+        
+        .responsive-table th:hover .header-content {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background: #1e293b;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 6px;
+            padding: 6px 10px;
+            white-space: nowrap;
+            z-index: 30;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #e2e8f0;
+        }
+        
+        .responsive-table td {
+            padding: 9px 6px;
+            font-size: 12px;
+            color: #cbd5e1;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+        }
+        
+        .responsive-table td:hover {
+            overflow: visible;
+            z-index: 5;
+        }
+        
+        .responsive-table td:hover .cell-content {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background: #1e293b;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            padding: 4px 8px;
+            white-space: nowrap;
+            z-index: 20;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+        }
+        
+        .responsive-table tr:hover td {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .responsive-table th:first-child,
+        .responsive-table td:first-child {
+            width: 32px;
+            min-width: 32px;
+            text-align: center;
+            color: #64748b;
+            font-size: 11px;
+            padding: 10px 2px;
+        }
+        
+        .responsive-table td a {
+            color: #60a5fa;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .responsive-table td a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+        
+        .price-cell {
+            color: #34d399 !important;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 767px) {
+            .responsive-table thead { display: none; }
+            .responsive-table tbody tr {
+                display: block;
+                margin-bottom: 10px;
+                border: 1px solid rgba(148, 163, 184, 0.1);
+                border-radius: 12px;
+                background: rgba(15, 23, 42, 0.6);
+                padding: 2px;
+            }
+            .responsive-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 7px 10px;
+                border-bottom: 1px solid rgba(148, 163, 184, 0.05);
+                white-space: nowrap;
+                max-width: 100%;
+                font-size: 13px;
+                overflow: visible;
+            }
+            .responsive-table td:last-child { border-bottom: none; }
+            .responsive-table td:first-child {
+                width: 100%;
+                min-width: 100%;
+                text-align: left;
+                justify-content: flex-start;
+                font-weight: 700;
+                font-size: 13px;
+                color: #93c5fd;
+                background: rgba(59, 130, 246, 0.08);
+                border-radius: 10px 10px 0 0;
+            }
+            .responsive-table td:not(:first-child)::before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 10px;
+                color: #64748b;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                margin-right: 8px;
+                flex-shrink: 0;
+                min-width: 50px;
+            }
+            .responsive-table td:first-child::before { display: none; }
+            .responsive-table td:hover .cell-content {
+                position: fixed;
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                max-width: 90vw;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .responsive-table th, .responsive-table td { padding: 10px 8px; }
+        }
+        
+        @media (min-width: 1024px) {
+            .responsive-table th, .responsive-table td { padding: 11px 10px; font-size: 13px; }
+        }
+        
+        .dropdown-item {
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            padding-left: 20px;
+        }
+        
+        .dropdown-open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+        .dropdown-closed {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-slate-100 antialiased min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-slate-900/80 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-700/50">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 shrink-0">
+                <div class="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full pulse-dot"></div>
+                <span class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Home Owner Leads</span>
+            </a>
+            <a href="index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-all shrink-0">← Back</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+        <div class="text-center mb-6 sm:mb-8">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-4">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                <span class="text-sm font-medium text-blue-400">Live Data Sample</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-2">
+                <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Select Your Market</span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-400">Pull a live sample of verified realtor data. All records shown.</p>
+        </div>
+
+        <div class="max-w-lg mx-auto mb-6">
+            <div class="gradient-border">
+                <div class="gradient-border-inner p-5 sm:p-6" style="overflow: visible;">
+                    <label class="block text-sm font-semibold mb-3 text-slate-300">📍 Select US State</label>
+                    <div class="relative w-full" id="customSelectContainer" style="z-index: 40;">
+                        <button id="dropdownTrigger" class="w-full flex items-center justify-between bg-slate-800/50 border border-slate-700/50 text-white rounded-xl px-5 py-3.5 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all hover:border-slate-600/50">
+                            <span id="selectedStateText" class="text-slate-400">Choose a State...</span>
+                            <svg id="dropdownIcon" class="w-5 h-5 text-slate-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <ul id="dropdownMenu" class="absolute z-50 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl max-h-64 overflow-y-auto dropdown-closed transition-all duration-300 origin-top" style="left: 0; right: 0;"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="actionContainer" class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 hidden">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                    <span id="recordCount" class="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">0</span>
+                </div>
+                <div>
+                    <div class="text-sm font-medium text-slate-300">Total Records</div>
+                    <div class="text-xs text-slate-500">for <span id="selectedStateBadge" class="font-semibold text-blue-400"></span></div>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button id="copyBtn" class="btn-secondary flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-300">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    Copy All
+                </button>
+                <button id="downloadBtn" class="btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download CSV
+                </button>
+            </div>
+        </div>
+
+        <div class="gradient-border">
+            <div class="gradient-border-inner table-scroll-container">
+                <table class="responsive-table" id="dataTable">
+                    <thead id="tableHeader"></thead>
+                    <tbody id="sample-tbody">
+                        <tr><td colspan="10" class="text-center py-16 text-slate-500" style="white-space: normal;">Select a state above to fetch live sample data.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Ahsan12116/my-landing-page/main/samples/';
+        const usStates = [
+            { code: "AL", name: "Alabama" },{ code: "AK", name: "Alaska" },{ code: "AZ", name: "Arizona" },
+            { code: "AR", name: "Arkansas" },{ code: "CA", name: "California" },{ code: "CO", name: "Colorado" },
+            { code: "CT", name: "Connecticut" },{ code: "DE", name: "Delaware" },{ code: "FL", name: "Florida" },
+            { code: "GA", name: "Georgia" },{ code: "HI", name: "Hawaii" },{ code: "ID", name: "Idaho" },
+            { code: "IL", name: "Illinois" },{ code: "IN", name: "Indiana" },{ code: "IA", name: "Iowa" },
+            { code: "KS", name: "Kansas" },{ code: "KY", name: "Kentucky" },{ code: "LA", name: "Louisiana" },
+            { code: "ME", name: "Maine" },{ code: "MD", name: "Maryland" },{ code: "MA", name: "Massachusetts" },
+            { code: "MI", name: "Michigan" },{ code: "MN", name: "Minnesota" },{ code: "MS", name: "Mississippi" },
+            { code: "MO", name: "Missouri" },{ code: "MT", name: "Montana" },{ code: "NE", name: "Nebraska" },
+            { code: "NV", name: "Nevada" },{ code: "NH", name: "New Hampshire" },{ code: "NJ", name: "New Jersey" },
+            { code: "NM", name: "New Mexico" },{ code: "NY", name: "New York" },{ code: "NC", name: "North Carolina" },
+            { code: "ND", name: "North Dakota" },{ code: "OH", name: "Ohio" },{ code: "OK", name: "Oklahoma" },
+            { code: "OR", name: "Oregon" },{ code: "PA", name: "Pennsylvania" },{ code: "RI", name: "Rhode Island" },
+            { code: "SC", name: "South Carolina" },{ code: "SD", name: "South Dakota" },{ code: "TN", name: "Tennessee" },
+            { code: "TX", name: "Texas" },{ code: "UT", name: "Utah" },{ code: "VT", name: "Vermont" },
+            { code: "VA", name: "Virginia" },{ code: "WA", name: "Washington" },{ code: "WV", name: "West Virginia" },
+            { code: "WI", name: "Wisconsin" },{ code: "WY", name: "Wyoming" }
+        ];
+
+        let currentActiveData = [], currentStateValue = "", currentColumns = [];
+        const dropdownTrigger = document.getElementById('dropdownTrigger');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const dropdownIcon = document.getElementById('dropdownIcon');
+        const selectedStateText = document.getElementById('selectedStateText');
+        const customSelectContainer = document.getElementById('customSelectContainer');
+        const tbody = document.getElementById('sample-tbody');
+        const tableHeader = document.getElementById('tableHeader');
+        const actionContainer = document.getElementById('actionContainer');
+        const recordCount = document.getElementById('recordCount');
+        const selectedStateBadge = document.getElementById('selectedStateBadge');
+
+        // STRICT PRICE COLUMNS ONLY - these are the ONLY columns that get $ sign
+        const priceColumnNames = [
+            'list price', 'price', 'sale price', 'asking price', 'sold price',
+            'listing price', 'original price', 'current price', 'market price',
+            'rent price', 'rental price', 'monthly rent', 'annual rent',
+            'amount', 'cost', 'fee', 'value', 'payment', 'monthly payment',
+            'hoa fee', 'hoa dues', 'property value', 'estimated value',
+            'tax value', 'assessed value', 'zestimate', 'redfin estimate'
+        ];
+
+        function filterColumns(columns) {
+            return columns.filter(col => {
+                const lower = col.toLowerCase().trim();
+                if (/(phone|mobile|cell|tel|fax).*(2|ii|second|alt|other|alternate|additional|extra)/i.test(lower)) return false;
+                if (/(2|ii|second|alt|other|alternate|additional|extra).*(phone|mobile|cell|tel|fax)/i.test(lower)) return false;
+                if (/phone\s*2|phone\s*#2|phone\s*ii/i.test(lower)) return false;
+                if (/mobile\s*2|cell\s*2|tel\s*2/i.test(lower)) return false;
+                return true;
+            });
+        }
+
+        // STRICT CHECK: Only return true if column name is explicitly a price column
+        function isPriceColumn(colName) {
+            if (!colName) return false;
+            const lower = colName.toLowerCase().trim();
+            return priceColumnNames.some(priceCol => lower.includes(priceCol));
+        }
+
+        function isURL(text) {
+            if (!text) return false;
+            const str = String(text).trim();
+            if (str.includes('@')) return false;
+            return /^https?:\/\//i.test(str) || /^www\./i.test(str) || /\.(com|org|net|io|co|gov|edu|us|info|biz)\b/i.test(str);
+        }
+
+        function isEmail(text) {
+            if (!text) return false;
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(text).trim());
+        }
+
+        function extractFirstPhone(text) {
+            if (!text) return '';
+            const str = String(text).trim();
+            const phoneRegex = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
+            const matches = str.match(phoneRegex);
+            return matches && matches.length > 0 ? matches[0].trim() : '';
+        }
+
+        function formatCell(value, colName) {
+            if (value === null || value === undefined || value === '') return '—';
+            const str = String(value).trim();
+            
+            if (isEmail(str)) {
+                return `<a href="mailto:${str}" title="Send email to ${str}">📧 ${str}</a>`;
+            }
+            
+            if (isURL(str)) {
+                let href = str;
+                if (!href.startsWith('http')) href = 'https://' + href;
+                const display = str.length > 40 ? str.substring(0, 40) + '...' : str;
+                return `<a href="${href}" target="_blank" rel="noopener" title="Open ${str}">🔗 ${display}</a>`;
+            }
+            
+            const firstPhone = extractFirstPhone(str);
+            if (firstPhone) {
+                const cleaned = firstPhone.replace(/[\s\-\(\)\.]/g, '');
+                return `<a href="tel:${cleaned}" title="Call ${firstPhone}">📞 ${firstPhone}</a>`;
+            }
+            
+            // PRICE - ONLY if column name is explicitly a price column
+            if (isPriceColumn(colName)) {
+                // Check if it's a valid number
+                const cleaned = str.replace(/[$,]/g, '');
+                if (/^\d+$/.test(cleaned) && parseInt(cleaned) > 0) {
+                    return `<span class="price-cell">$${Number(cleaned).toLocaleString()}</span>`;
+                }
+            }
+            
+            return str;
+        }
+
+        function initCustomDropdown() {
+            usStates.forEach(state => {
+                const li = document.createElement('li');
+                li.className = "dropdown-item px-5 py-3 text-slate-300 border-b border-slate-700/30 last:border-0 flex items-center gap-3";
+                li.innerHTML = `<span class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center text-xs font-bold text-blue-400">${state.code}</span><span>${state.name}</span>`;
+                li.addEventListener('click', () => {
+                    currentStateValue = state.code;
+                    selectedStateText.textContent = `${state.name} (${state.code})`;
+                    selectedStateText.classList.remove('text-slate-400');
+                    selectedStateText.classList.add('text-white', 'font-medium');
+                    closeDropdown();
+                    fetchDataForState(state.code);
+                });
+                dropdownMenu.appendChild(li);
+            });
+        }
+
+        function toggleDropdown() {
+            const isClosed = dropdownMenu.classList.contains('dropdown-closed');
+            if (isClosed) {
+                dropdownMenu.classList.remove('dropdown-closed');
+                dropdownMenu.classList.add('dropdown-open');
+                dropdownIcon.classList.add('rotate-180');
+            } else { closeDropdown(); }
+        }
+
+        function closeDropdown() {
+            dropdownMenu.classList.remove('dropdown-open');
+            dropdownMenu.classList.add('dropdown-closed');
+            dropdownIcon.classList.remove('rotate-180');
+        }
+
+        dropdownTrigger.addEventListener('click', (e) => { e.preventDefault(); toggleDropdown(); });
+        document.addEventListener('click', (e) => { if (!customSelectContainer.contains(e.target)) closeDropdown(); });
+
+        async function fetchDataForState(selectedState) {
+            clearTable(`Fetching data for ${selectedState}...`);
+            try {
+                const fileUrl = `${GITHUB_BASE_URL}${selectedState}.xlsx`;
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error(`File not found`);
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                let rawData = XLSX.utils.sheet_to_json(worksheet);
+                currentActiveData = rawData.map(row => ({ ...row }));
+                const allColumns = rawData.length > 0 ? Object.keys(rawData[0]) : [];
+                currentColumns = filterColumns(allColumns);
+                renderTable(currentActiveData, selectedState);
+            } catch (error) {
+                currentActiveData = []; currentColumns = [];
+                clearTable(`No data file found for ${selectedState} yet.`);
+            }
+        }
+
+        function renderTable(data, stateCode) {
+            if (!data || data.length === 0) { 
+                clearTable(`The data file for ${stateCode} is empty.`); 
+                return; 
+            }
+
+            actionContainer.classList.remove('hidden');
+            recordCount.textContent = data.length;
+            selectedStateBadge.textContent = stateCode;
+            
+            const columnsToShow = currentColumns.length > 0 ? currentColumns : 
+                ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
+            
+            const colWidth = Math.floor(100 / (columnsToShow.length + 1));
+            const colStyle = `width: ${colWidth}%;`;
+            
+            tableHeader.innerHTML = `<tr>
+                <th style="width: 32px;">#</th>
+                ${columnsToShow.map(col => 
+                    `<th style="${colStyle}" title="${col}"><span class="header-content">${col}</span></th>`
+                ).join('')}
+            </tr>`;
+            
+            tbody.innerHTML = data.map((lead, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    ${columnsToShow.map(col => {
+                        const value = lead[col] || '';
+                        const formatted = formatCell(value, col);
+                        const plainText = String(value || '—').replace(/"/g, '&quot;');
+                        return `<td data-label="${col}" style="${colStyle}" title="${plainText}"><span class="cell-content">${formatted}</span></td>`;
+                    }).join('')}
+                </tr>
+            `).join('');
+        }
+
+        function clearTable(message) {
+            actionContainer.classList.add('hidden');
+            tableHeader.innerHTML = `<tr><th style="width: 32px;">#</th><th>Agent Name</th><th>Phone</th><th>Email</th><th>Agency</th><th>City</th><th>State</th></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-16 text-slate-500" style="white-space: normal;">${message}</td></tr>`;
+        }
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            if(currentActiveData.length === 0) return;
+            const columnsToUse = currentColumns.length > 0 ? currentColumns : ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
+            const headers = columnsToUse.join('\t') + '\n';
+            const rows = currentActiveData.map(row => columnsToUse.map(col => row[col] || '').join('\t')).join('\n');
+            navigator.clipboard.writeText(headers + rows).then(() => {
+                const orig = this.innerHTML;
+                this.innerHTML = `<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!`;
+                setTimeout(() => this.innerHTML = orig, 2000);
+            });
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if(currentActiveData.length === 0) return;
+            const columnsToUse = currentColumns.length > 0 ? currentColumns : ['Agent Name', 'Phone', 'Email', 'Agency', 'City', 'State'];
+            const headers = columnsToUse.map(col => `"${col}"`).join(',') + '\n';
+            const rows = currentActiveData.map(row => columnsToUse.map(col => `"${(row[col]||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+            const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `home_owner_leads_${currentStateValue}.csv`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        });
+
+        initCustomDropdown();
+    </script>
+</body>
+</html>
